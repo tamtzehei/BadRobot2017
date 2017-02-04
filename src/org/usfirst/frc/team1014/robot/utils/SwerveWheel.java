@@ -21,22 +21,20 @@ public class SwerveWheel {
 	
 	public void drive(Vector2d translation, SpeedControllerNormalizer normalizer)
 	{   
+		double encoderMax = 880;
+		double encoderMin = 12;
+		double rawCurrent = pivot.getAnalogInRaw();
+		double rawFinal = (encoderMax-encoderMin)*(Math.atan2(translation.getY(), translation.getX())/(2*Math.PI))+encoderMin;
+		double diff = rawFinal-rawCurrent;
 		
-		Vector2d rotate = perpendicular.scale(rotation);
-		Vector2d move = rotate.add(translation);//new Vector2d((rotate.getX() + translation.getX()), (rotate.getY() + translation.getY()));
+		if(Math.abs(diff)>(encoderMax-encoderMin)/4 )
+			diff= -1*((encoderMax-encoderMin)-diff);
 		
-		pivot.changeControlMode(TalonControlMode.Position);
-		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
-		pivot.setPID(16.0, 0.0, 0.0);
-		pivot.enableControl();
 		
-		double position = (Math.atan2(move.getY(), move.getX()) - (Math.PI / 2) * 2.84);
 		
-		pivot.set(position);
 		
-		double speed = move.getMagnitude();//Math.sqrt(move.getX() * move.getX() + move.getY() * move.getY());
 		
-		drive.set(speed);
+		
 		normalizer.add(drive, speed);
 	}
 
