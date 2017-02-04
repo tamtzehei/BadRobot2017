@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1014.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 import org.usfirst.frc.team1014.robot.commands.ExampleCommand;
@@ -9,6 +10,14 @@ import org.usfirst.frc.team1014.robot.commands.ExampleCommand;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	
+	public static DriverStation driverStation;
+	public static XboxController xboxController0;
+	public static void init()
+	{
+		driverStation = DriverStation.getInstance();
+		xboxController0 = new XboxController(0);
+	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
