@@ -29,7 +29,7 @@ public class DriveTrain extends Subsystem{
 	
 	private DriveTrain()
 	{
-		//Temporary values
+		//Temporary values Need encoderMin, Max, offset
 		wheelA = new SwerveWheel(new Vector2d(1,1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A);
 		wheelB = new SwerveWheel(new Vector2d(-1,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B);
 		wheelC = new SwerveWheel(new Vector2d(-1,-1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C);
@@ -48,10 +48,10 @@ public class DriveTrain extends Subsystem{
 		System.out.println("ANGLE: " + robotAngle);
 		System.out.println("IN: " + translation);
 		
-		wheelA.drive(rotation, translation, normalizer);
-		wheelB.drive(rotation, translation, normalizer);
-		wheelC.drive(rotation, translation, normalizer);
-		wheelD.drive(rotation, translation, normalizer);
+		wheelA.drive(translation, normalizer);
+		wheelB.drive(translation, normalizer);
+		wheelC.drive(translation, normalizer);
+		wheelD.drive(translation, normalizer);
 		
 		normalizer.run();
 		normalizer.clear();
