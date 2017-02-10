@@ -30,10 +30,10 @@ public class DriveTrain extends Subsystem{
 	private DriveTrain()
 	{
 		//Temporary values Need encoderMin, Max, offset
-		wheelA = new SwerveWheel(new Vector2d(1,1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A);
-		wheelB = new SwerveWheel(new Vector2d(-1,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B);
-		wheelC = new SwerveWheel(new Vector2d(-1,-1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C);
-		wheelD = new SwerveWheel(new Vector2d(1,-1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D);
+		wheelA = new SwerveWheel(new Vector2d(1,1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A , 222,  880, 12);
+		wheelB = new SwerveWheel(new Vector2d(-1,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B ,1 ,1 ,1);
+		wheelC = new SwerveWheel(new Vector2d(-1,-1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C ,1 ,1, 1);
+		wheelD = new SwerveWheel(new Vector2d(1,-1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 1, 1, 1);
 		
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
 		imu = new IMU(mxpPort, (byte) 127);

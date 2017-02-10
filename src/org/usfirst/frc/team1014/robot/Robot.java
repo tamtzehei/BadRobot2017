@@ -2,6 +2,7 @@
 package org.usfirst.frc.team1014.robot;
 
 import org.usfirst.frc.team1014.robot.commands.ExampleCommand;
+import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team1014.robot.utils.SmartDashboard;
 
@@ -110,6 +111,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		Scheduler.getInstance().add(new TeleDrive());
 		Scheduler.getInstance().run();
 	}
 
