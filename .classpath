@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="lib/TalonSRXLibJava.jar"/>
 	<classpathentry kind="lib" path="lib/WPILib.jar"/>
 	<classpathentry kind="lib" path="lib/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="lib/navx_frc.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
