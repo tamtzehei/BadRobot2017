@@ -1,10 +1,9 @@
 package org.usfirst.frc.team1014.robot.subsystems;
 
 import org.usfirst.frc.team1014.robot.RobotMap;
-import org.usfirst.frc.team1014.robot.subsystems.IMU;
+import org.usfirst.frc.team1014.robot.util.Vector2d;
 import org.usfirst.frc.team1014.robot.utils.SpeedControllerNormalizer;
 import org.usfirst.frc.team1014.robot.utils.SwerveWheel;
-import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;

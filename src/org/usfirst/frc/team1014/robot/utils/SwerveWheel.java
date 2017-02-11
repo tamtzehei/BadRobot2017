@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1014.robot.utils;
 
+import org.usfirst.frc.team1014.robot.util.Vector2d;
+
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
@@ -31,9 +33,11 @@ public class SwerveWheel {
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
 		int negativeIfInverted = 1;
 
-		translation.add(perpendicular.scale(rotation));
+		//translation.add(perpendicular.scale(rotation));
+		
+		translation = new Vector2d(translation.getX() + rotation * perpendicular.getX(), translation.getY() + rotation * perpendicular.getY());
 
-		double speed = translation.getMagnitude();
+		double speed = translation.magnitude();
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
