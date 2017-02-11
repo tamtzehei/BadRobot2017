@@ -5,7 +5,6 @@ dist/
 sysProps.xml
 workbench.xmi
 *.class
-*.jar
 
 # Temporary Files
 *~
