@@ -14,8 +14,8 @@ public class TeleDrive extends Command {
 	}
 
 	public void execute() {
-		DriveTrain.getInstance().drive(OI.xboxController0.getRightStickX(),
-				new Vector2d(OI.xboxController0.getLeftStickX(), OI.xboxController0.getLeftStickY()));
+		DriveTrain.getInstance().drive(OI.xboxController0.getRawAxis(4),
+				new Vector2d(OI.xboxController0.getRawAxis(0), OI.xboxController0.getRawAxis(1)));
 
 	}
 

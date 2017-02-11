@@ -48,10 +48,10 @@ public class DriveTrain extends Subsystem{
 		System.out.println("ANGLE: " + robotAngle);
 		System.out.println("IN: " + translation);
 		
-		wheelA.drive(translation, normalizer);
-		wheelB.drive(translation, normalizer);
-		wheelC.drive(translation, normalizer);
-		wheelD.drive(translation, normalizer);
+		wheelA.drive(translation, rotation, normalizer);
+		wheelB.drive(translation, rotation, normalizer);
+		wheelC.drive(translation, rotation, normalizer);
+		wheelD.drive(translation, rotation, normalizer);
 		
 		normalizer.run();
 		normalizer.clear();
