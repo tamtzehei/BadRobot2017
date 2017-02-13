@@ -10,12 +10,12 @@ public class TeleDrive extends Command {
 	
 	protected void initialize()
 	{
-		requires(DriveTrain.getInstance());
+		//requires(DriveTrain.getInstance());
 	}
 
 	public void execute() {
 		DriveTrain.getInstance().drive(OI.xboxController0.getRawAxis(4),
-				new Vector2d(OI.xboxController0.getRawAxis(0), OI.xboxController0.getRawAxis(1)));
+				new Vector2d(OI.xboxController0.getRawAxis(0), -1 * OI.xboxController0.getRawAxis(1)));
 
 	}
 

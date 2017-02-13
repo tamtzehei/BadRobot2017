@@ -28,11 +28,10 @@ public class DriveTrain extends Subsystem{
 	
 	private DriveTrain()
 	{
-		//Temporary values Need encoderMin, Max, offset
-		wheelA = new SwerveWheel(new Vector2d(1,1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A , 222,  880, 12);
-		wheelB = new SwerveWheel(new Vector2d(-1,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B ,1 ,1 ,1);
-		wheelC = new SwerveWheel(new Vector2d(-1,-1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C ,1 ,1, 1);
-		wheelD = new SwerveWheel(new Vector2d(1,-1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 1, 1, 1);
+		wheelA = new SwerveWheel(new Vector2d(12.75 ,11), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A , 354, 888, 13);
+		wheelB = new SwerveWheel(new Vector2d(-12.75 ,11), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B , 171, 867, 13);
+		wheelC = new SwerveWheel(new Vector2d(-12.75 ,-11), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C , 824, 882, 13);
+		wheelD = new SwerveWheel(new Vector2d(12.75 ,-11), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 473, 888, 13);
 		
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
 		imu = new IMU(mxpPort, (byte) 127);
@@ -41,7 +40,12 @@ public class DriveTrain extends Subsystem{
     
 	public void drive(double rotation, Vector2d translation)
 	{
-	
+		/*if(Math.abs(rotation) < .15)
+			rotation = 0;*/
+		
+		/*if(translation.magnitude() < .15)
+			translation = new Vector2d(0,0);*/
+	                     
 		double robotAngle = Math.toRadians(imu.getYaw());
 		
 		System.out.println("ANGLE: " + robotAngle);
@@ -52,8 +56,8 @@ public class DriveTrain extends Subsystem{
 		wheelC.drive(translation, rotation, normalizer);
 		wheelD.drive(translation, rotation, normalizer);
 		
-		normalizer.run();
-		normalizer.clear();
+		//normalizer.run();
+		//normalizer.clear();
 	}
 
 	@Override
