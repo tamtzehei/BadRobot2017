@@ -71,6 +71,7 @@ public class SwerveWheel {
 			n--;
 
 		double finalPosition = rawFinal + (n * 1024);
+		
 		/*
 		 * double diff = finalPosition - currentPosition;
 		 * 
