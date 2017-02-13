@@ -13,7 +13,7 @@ public class Vector2d {
 	 * @return the magnitude of the vector
 	 */
 	public double magnitude() {
-		return Math.sqrt(x * x + y * y);
+		return Math.sqrt(Math.abs(x) * Math.abs(x) + Math.abs(y) * Math.abs(y));
 	}
 	
 	/**

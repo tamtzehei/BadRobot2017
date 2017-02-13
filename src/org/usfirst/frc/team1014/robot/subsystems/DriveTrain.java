@@ -28,10 +28,13 @@ public class DriveTrain extends Subsystem{
 	
 	private DriveTrain()
 	{
-		wheelA = new SwerveWheel(new Vector2d(12.75 ,11), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A , 354, 888, 13);
-		wheelB = new SwerveWheel(new Vector2d(-12.75 ,11), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B , 171, 867, 13);
-		wheelC = new SwerveWheel(new Vector2d(-12.75 ,-11), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C , 824, 882, 13);
-		wheelD = new SwerveWheel(new Vector2d(12.75 ,-11), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 473, 888, 13);
+		//12.75, 11
+		wheelA = new SwerveWheel(new Vector2d(1 ,1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A , 354, 888, 13);
+		//wheelB = new SwerveWheel(new Vector2d(-1 ,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B , 171, 867, 13);
+		wheelB = new SwerveWheel(new Vector2d(-1 ,1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B , 171, 867, 13);
+		wheelC = new SwerveWheel(new Vector2d(-1 ,-1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C , 824, 882, 13);
+		//wheelD = new SwerveWheel(new Vector2d(1 ,-1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 473, 888, 13);
+		wheelD = new SwerveWheel(new Vector2d(1 ,-1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 473, 888, 13);
 		
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
 		imu = new IMU(mxpPort, (byte) 127);

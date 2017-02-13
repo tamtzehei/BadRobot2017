@@ -35,8 +35,8 @@ public class SwerveWheel {
 
 		// translation.add(perpendicular.scale(rotation));
 
-		Vector2d move = new Vector2d(translation.getX() + rotation * perpendicular.getX(),
-				translation.getY() + rotation * perpendicular.getY());
+		Vector2d move = new Vector2d(translation.getX() + (rotation * perpendicular.getX()),
+				translation.getY() + (rotation * perpendicular.getY()));
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
@@ -65,12 +65,12 @@ public class SwerveWheel {
 		double n = Math.floor(currentPosition / 1024);
 
 		if (rawFinal < rawCurrent && (rawCurrent - rawFinal) > (range / 2))
-			n--;
-
-		if (rawFinal > rawCurrent && (rawFinal - rawCurrent) > (range / 2))
 			n++;
 
-		double finalPosition = rawFinal + n * 1024;
+		if (rawFinal > rawCurrent && (rawFinal - rawCurrent) > (range / 2))
+			n--;
+
+		double finalPosition = rawFinal + (n * 1024);
 		/*
 		 * double diff = finalPosition - currentPosition;
 		 * 
@@ -91,11 +91,12 @@ public class SwerveWheel {
 		pivot.setPID(4, 0, 0);
 		pivot.enableControl();
 		pivot.set(finalPosition);
-		
+
 		double speed = negativeIfInverted * move.magnitude();
+		System.out.println(speed);
 
 		//normalizer.add(drive, speed);
-		drive.set(.5);
+		 drive.set(speed);
 	}
 
 }
