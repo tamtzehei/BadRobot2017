@@ -14,6 +14,8 @@ public class SwerveWheel {
 	private double encoderMax;
 	private double encoderMin;
 	private double range;
+	Vector2d move;
+	double finalPosition;
 
 	public SwerveWheel(Vector2d location, int driveMotorPin, int pivotMotorPin, double offset, double encoderMax,
 			double encoderMin) {
@@ -31,11 +33,13 @@ public class SwerveWheel {
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
 
+		double speed = 0;
 		int negativeIfInverted = 1;
 
 		// translation.add(perpendicular.scale(rotation));
-
-		Vector2d move = new Vector2d(translation.getX() + (rotation * perpendicular.getX()),
+		
+		
+		move = new Vector2d(translation.getX() + (rotation * perpendicular.getX()),
 				translation.getY() + (rotation * perpendicular.getY()));
 
 		double currentPosition = pivot.getPosition();
@@ -45,11 +49,7 @@ public class SwerveWheel {
 
 		// if dot product is less than 0 that means the angle is obtuse so we
 		// need to make the translation vector negative
-		if ((currentVector.getX() * move.getX() + currentVector.getY() * move.getY()) < 0) {
-			move.scale(-1);
-			//translation = new Vector2d((-1 * move.getX()), (-1 * move.getY()));
-			negativeIfInverted = -1;
-		}
+		
 
 		// double rawFinal = (range) * (Math.atan2(translation.getY(),
 		// translation.getX()) / (2 * Math.PI)) + encoderMin + offset;
@@ -63,13 +63,19 @@ public class SwerveWheel {
 			rawFinal -= range;
 		}
 
-		double finalPosition = rawFinal + Math.floor(currentPosition / 1024) * 1024;
+		finalPosition = rawFinal + Math.floor(currentPosition / 1024) * 1024;
 		
-		if(finalPosition - currentPosition > range / 4)
+		if(finalPosition - currentPosition > range / 2)
 			finalPosition -= 1024;
 		
-		if(finalPosition - currentPosition < -range / 4)
+		if(finalPosition - currentPosition < -range / 2)
 			finalPosition += 1024;
+		
+		if ((currentVector.getX() * move.getX() + currentVector.getY() * move.getY()) < 0) {
+			move.scale(-1);
+			//translation = new Vector2d((-1 * move.getX()), (-1 * move.getY()));
+			negativeIfInverted = -1;
+		}
 		
 		/*if (rawFinal < rawCurrent && (rawCurrent - rawFinal) > (range / 2))
 			n++;
@@ -93,6 +99,12 @@ public class SwerveWheel {
 		 * if(rawCurrent + diff < encoderMin){ diff -= (1024 - range); }
 		 * 
 		 */
+		speed = negativeIfInverted * move.magnitude();
+		
+		if(move.magnitude() < .15){
+			speed = 0;
+			finalPosition = currentPosition;
+		}
 
 		pivot.changeControlMode(TalonControlMode.Position);
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
@@ -100,7 +112,6 @@ public class SwerveWheel {
 		pivot.enableControl();
 		pivot.set(finalPosition);
 
-		double speed = negativeIfInverted * move.magnitude();
 
 		//normalizer.add(drive, speed);
 		drive.set(speed);

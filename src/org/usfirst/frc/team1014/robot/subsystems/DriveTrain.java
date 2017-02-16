@@ -46,8 +46,8 @@ public class DriveTrain extends Subsystem{
 		if(Math.abs(rotation) < .15)
 			rotation = 0;
 		
-		if(translation.magnitude() < .15)
-			translation = new Vector2d(0,0);
+		/*if(translation.magnitude() < .15)
+			translation = new Vector2d(0,0);*/
 	                     
 		double robotAngle = Math.toRadians(imu.getYaw());
 		
