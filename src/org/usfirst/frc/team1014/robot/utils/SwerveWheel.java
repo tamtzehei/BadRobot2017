@@ -46,7 +46,8 @@ public class SwerveWheel {
 		// if dot product is less than 0 that means the angle is obtuse so we
 		// need to make the translation vector negative
 		if ((currentVector.getX() * move.getX() + currentVector.getY() * move.getY()) < 0) {
-			translation = new Vector2d((-1 * move.getX()), (-1 * move.getY()));
+			move.scale(-1);
+			//translation = new Vector2d((-1 * move.getX()), (-1 * move.getY()));
 			negativeIfInverted = -1;
 		}
 
@@ -62,15 +63,21 @@ public class SwerveWheel {
 			rawFinal -= range;
 		}
 
-		double n = Math.floor(currentPosition / 1024);
-
-		if (rawFinal < rawCurrent && (rawCurrent - rawFinal) > (range / 2))
+		double finalPosition = rawFinal + Math.floor(currentPosition / 1024) * 1024;
+		
+		if(finalPosition - currentPosition > range / 4)
+			finalPosition -= 1024;
+		
+		if(finalPosition - currentPosition < -range / 4)
+			finalPosition += 1024;
+		
+		/*if (rawFinal < rawCurrent && (rawCurrent - rawFinal) > (range / 2))
 			n++;
 
 		if (rawFinal > rawCurrent && (rawFinal - rawCurrent) > (range / 2))
-			n--;
+			n--;*/
 
-		double finalPosition = rawFinal + (n * 1024);
+		//double finalPosition = rawFinal + (n * 1024);
 		
 		/*
 		 * double diff = finalPosition - currentPosition;
@@ -94,10 +101,9 @@ public class SwerveWheel {
 		pivot.set(finalPosition);
 
 		double speed = negativeIfInverted * move.magnitude();
-		System.out.println(speed);
 
 		//normalizer.add(drive, speed);
-		 drive.set(speed);
+		drive.set(speed);
 	}
 
 }
