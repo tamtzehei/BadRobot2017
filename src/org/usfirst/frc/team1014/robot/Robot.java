@@ -4,6 +4,10 @@ import org.usfirst.frc.team1014.robot.commands.AutoGroup;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
 
+import org.usfirst.frc.team1014.robot.commands.CommandBase;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -19,6 +23,12 @@ public class Robot extends IterativeRobot {
 	TeleopGroup teleopGroup;
 	AutoGroup autoGroup;
 	TestGroup testGroup;
+	
+	boolean lightsRed = false;
+	boolean lightsSomething = false;
+	boolean lightsBlue = false;
+	boolean lightsRainbow = false;
+	boolean lightsVal = false;
 
 	public static OI oi;
 
@@ -32,6 +42,11 @@ public class Robot extends IterativeRobot {
 		teleopGroup = new TeleopGroup();
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
+		
+		if(CommandBase.lights != null)
+		{	
+			CommandBase.lights.setLights(LEDState.kDEFAULT);
+		}
 	}
 	
 	/*
