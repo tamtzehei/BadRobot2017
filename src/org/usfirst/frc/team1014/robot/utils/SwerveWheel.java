@@ -6,6 +6,8 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
+import edu.wpi.first.wpilibj.Encoder;
+
 public class SwerveWheel {
 
 	private Vector2d perpendicular;
@@ -16,40 +18,52 @@ public class SwerveWheel {
 	private double range;
 	Vector2d move;
 	double finalPosition;
+	Encoder encoder;
+	private double encoderCPR;
 
 	public SwerveWheel(Vector2d location, int driveMotorPin, int pivotMotorPin, double offset, double encoderMax,
-			double encoderMin) {
-
+			double encoderMin, int encoderAPin, int encoderBPin, double encoderCPR) {
+		
+		this.encoderCPR = encoderCPR;
 		this.offset = offset;
 		this.encoderMax = encoderMax;
 		this.encoderMin = encoderMin;
 		range = encoderMax - encoderMin;
 
-		perpendicular = location.perpendicularCCW();
+		perpendicular = location.perpendicularCW();
+		perpendicular = perpendicular.normalize();
 
 		drive = new CANTalon(driveMotorPin);
 		pivot = new CANTalon(pivotMotorPin);
+		encoder = new Encoder(encoderAPin, encoderBPin);
+
+		pivot.changeControlMode(TalonControlMode.Position);
+		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
+		pivot.setPID(16, 0, 0);
+		pivot.enableControl();
 	}
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
 
-		double speed = 0;
-		int negativeIfInverted = 1;
+		double speed = 0.0;
+		double negativeIfInverted = 1.0;
 
 		// Magnitude of rotation cancels out with radius of circle of rotation
 		move = translation.add(perpendicular.scale(rotation));
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
-		double currentRadians = (Math.PI * 2 * (rawCurrent - offset)) / range;
-		Vector2d currentVector = new Vector2d(Math.cos(currentRadians), Math.sin(currentRadians));
+		double currentRadians = (Math.PI * 2.0 * (rawCurrent - offset)) / range;
 
-		// if dot product is less than 0 that means the angle is obtuse so we
-		// need to make the translation vector negative
-
-		// double rawFinal = (range) * (Math.atan2(translation.getY(),
-		// translation.getX()) / (2 * Math.PI)) + encoderMin + offset;
-		double rawFinal = (range / (2 * Math.PI)) * Math.atan2(move.getY(), move.getX()) + offset;
+		Vector2d currentVector = new Vector2d(Math.cos(currentRadians), Math.sin(currentRadians));		
+		
+		//if (Math.acos(((currentVector.getX() * move.getX()) + (currentVector.getY() * move.getY())) / (currentVector.magnitude() * move.magnitude())) > Math.PI / 2) {
+		if((currentVector.getX() * move.getX() + currentVector.getY() * move.getY()) < 0.0)	{
+			move = move.scale(-1.0);
+			negativeIfInverted = -1.0;
+		}
+	
+		double rawFinal = ((range / (2.0 * Math.PI)) * Math.atan2(move.getY(), move.getX())) + offset;
 
 		if (rawFinal < encoderMin) {
 			rawFinal += range;
@@ -59,58 +73,50 @@ public class SwerveWheel {
 			rawFinal -= range;
 		}
 
-		finalPosition = rawFinal + Math.floor(currentPosition / 1024) * 1024;
-		
-		if(finalPosition - currentPosition > range / 2)
-			finalPosition -= 1024;
-		
-		if(finalPosition - currentPosition < -range / 2)
-			finalPosition += 1024;
-		
-		if ((currentVector.getX() * move.getX() + currentVector.getY() * move.getY()) < 0) {
-			move.scale(-1);
-			//translation = new Vector2d((-1 * move.getX()), (-1 * move.getY()));
-			negativeIfInverted = -1;
-		}
-		
-		/*if (rawFinal < rawCurrent && (rawCurrent - rawFinal) > (range / 2))
-			n++;
+		finalPosition = rawFinal + Math.floor(currentPosition / 1024.0) * 1024.0;
 
-		if (rawFinal > rawCurrent && (rawFinal - rawCurrent) > (range / 2))
-			n--;*/
+		if ((finalPosition - currentPosition) > (range / 4.0))
+			finalPosition -= 1024.0;
 
-		//double finalPosition = rawFinal + (n * 1024);
-		
-		/*
-		 * double diff = finalPosition - currentPosition;
-		 * 
-		 * if(currentPosition % 1024 + diff > encoderMax) n++;
-		 */
-		/*
-		 * if (Math.abs(diff) > (range) / 4) { speed = -1 * speed; diff = -1 *
-		 * (((range) / 2) - diff); }
-		 * 
-		 * if(rawCurrent + diff > encoderMax){ diff += (1024 - range); }
-		 * 
-		 * if(rawCurrent + diff < encoderMin){ diff -= (1024 - range); }
-		 * 
-		 */
-		speed = negativeIfInverted * move.magnitude();
-		
-		if(move.magnitude() < .15){
-			speed = 0;
+		if ((finalPosition - currentPosition) < (-range / 4.0))
+			finalPosition += 1024.0;
+
+		if (move.magnitude() < .15) {
+			speed = 0.0;
 			finalPosition = currentPosition;
 		}
-
-		pivot.changeControlMode(TalonControlMode.Position);
-		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
-		pivot.setPID(4, 0, 0);
-		pivot.enableControl();
+		
+		speed = negativeIfInverted * move.magnitude();
+		
 		pivot.set(finalPosition);
 
-
-		//normalizer.add(drive, speed);
-		drive.set(speed);
+		normalizer.add(drive, speed);
+	}
+	
+	public void relativeDrive(double angle, double speed, SpeedControllerNormalizer normalizer){
+		angle /= 2d * Math.PI;
+		double turn_speed = rotateFunc(angle);
+		if ((angle - getAngle()) % 1 > .25 && (angle - getAngle()) % 1 < .75)
+			speed = -speed;
+		normalizer.add(drive, speed);
+		pivot.set(turn_speed);
+	}
+	
+	private double rotateFunc(double angle) {
+		angle -= getAngle();
+		angle = angle % 1d;
+		if (angle < .25)
+			return angle * 4;
+		if (angle > .75)
+			return (angle - 1) * 4;
+		return (angle - .5) * 4;
 	}
 
+	public void center() {
+		encoder.reset();
+	}
+
+	public double getAngle() {
+		return ((double) encoder.get()) / encoderCPR;
+	}
 }
