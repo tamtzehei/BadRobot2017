@@ -4,6 +4,9 @@ import org.usfirst.frc.team1014.robot.commands.AutoGroup;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
 
+import com.ctre.CANTalon;
+
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -19,6 +22,8 @@ public class Robot extends IterativeRobot {
 	TeleopGroup teleopGroup;
 	AutoGroup autoGroup;
 	TestGroup testGroup;
+	
+	CANTalon climbTalon = new CANTalon(30);
 
 	public static OI oi;
 
@@ -77,6 +82,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
+		climbTalon.set(oi.xboxController0.getTriggerAxis(Hand.kLeft) - oi.xboxController0.getTriggerAxis(Hand.kRight));
 	}
 
 	@Override

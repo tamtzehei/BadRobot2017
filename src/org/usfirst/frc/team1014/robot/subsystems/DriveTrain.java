@@ -8,6 +8,8 @@ import org.usfirst.frc.team1014.robot.util.Vector2d;
 import org.usfirst.frc.team1014.robot.utils.SpeedControllerNormalizer;
 import org.usfirst.frc.team1014.robot.utils.SwerveWheel;
 
+import com.ctre.CANTalon;
+
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -17,6 +19,8 @@ public class DriveTrain extends Subsystem {
 	List<SwerveWheel> swerveWheels;
 	SerialPort mxpPort;
 	IMU imu;
+	double l = 19.0;
+	double w = 27.0;
 	private static final double ENCODER_CPR = 414.1666d;
 
 	public static DriveTrain getInstance() {
@@ -28,14 +32,14 @@ public class DriveTrain extends Subsystem {
 	private DriveTrain() {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
-				add(new SwerveWheel(new Vector2d(12.75, 11), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 334, 888,
-						13, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
-				add(new SwerveWheel(new Vector2d(-12.75, 11), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 722, 867,
-						13, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B
-				add(new SwerveWheel(new Vector2d(-12.75, -11), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 127, 882,
-						13, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
-				add(new SwerveWheel(new Vector2d(12.75, -11), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 731, 888,
-						13, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
+				add(new SwerveWheel(new Vector2d(-l/2, w/2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 288, 862,
+						11, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
+				add(new SwerveWheel(new Vector2d(-l/2, -w/2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 700, 863,
+						11, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B 373
+				add(new SwerveWheel(new Vector2d(l/2, -w/2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 752, 867,
+						11, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
+				add(new SwerveWheel(new Vector2d(l/2, w/2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 75, 850,
+						11, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
 			}
 		};
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
