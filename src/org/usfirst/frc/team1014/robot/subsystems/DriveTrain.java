@@ -28,7 +28,8 @@ public class DriveTrain extends Subsystem {
 			{
 				add(new SwerveWheel(new Vector2d(1, 1), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 354, 888, 13)); // A
 				add(new SwerveWheel(new Vector2d(-1, 1), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 171, 867, 13)); // B
-				add(new SwerveWheel(new Vector2d(-1, -1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 824, 882, 13)); // C
+				add(new SwerveWheel(new Vector2d(-1, -1), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 824, 882,
+						13)); // C
 				add(new SwerveWheel(new Vector2d(1, -1), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 737, 888, 13)); // D
 			}
 		};
