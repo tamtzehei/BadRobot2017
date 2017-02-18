@@ -7,6 +7,10 @@ public class Vector2d {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Vector2d add(Vector2d other) {
+		return new Vector2d(this.x + other.getX(), this.y + other.getY());
+	}
 
 	/**
 	 * Returns distance of a point at the end of the vector to the origin.
