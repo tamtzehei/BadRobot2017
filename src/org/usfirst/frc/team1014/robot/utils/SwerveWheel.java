@@ -36,11 +36,8 @@ public class SwerveWheel {
 		double speed = 0;
 		int negativeIfInverted = 1;
 
-		// translation.add(perpendicular.scale(rotation));
-		
-		
-		move = new Vector2d(translation.getX() + (rotation * perpendicular.getX()),
-				translation.getY() + (rotation * perpendicular.getY()));
+		// Magnitude of rotation cancels out with radius of circle of rotation
+		move = translation.add(perpendicular.scale(rotation));
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
@@ -49,7 +46,6 @@ public class SwerveWheel {
 
 		// if dot product is less than 0 that means the angle is obtuse so we
 		// need to make the translation vector negative
-		
 
 		// double rawFinal = (range) * (Math.atan2(translation.getY(),
 		// translation.getX()) / (2 * Math.PI)) + encoderMin + offset;
