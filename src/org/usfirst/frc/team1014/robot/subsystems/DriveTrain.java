@@ -37,14 +37,7 @@ public class DriveTrain extends Subsystem {
 		normalizer = new SpeedControllerNormalizer();
 	}
 
-	public void drive(double rotation, Vector2d translation) {
-		if (Math.abs(rotation) < .15)
-			rotation = 0;
-
-		/*
-		 * if(translation.magnitude() < .15) translation = new Vector2d(0,0);
-		 */
-
+	public void drive(final double rotation, final Vector2d translation) {
 		swerveWheels.forEach((w) -> w.drive(translation, rotation, normalizer));
 
 		// normalizer.run();
