@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team1014.robot;
 
 import org.usfirst.frc.team1014.robot.commands.AutoGroup;
@@ -94,3 +93,4 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 	}
 }
+
