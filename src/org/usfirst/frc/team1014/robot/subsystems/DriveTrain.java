@@ -19,8 +19,8 @@ public class DriveTrain extends Subsystem {
 	List<SwerveWheel> swerveWheels;
 	SerialPort mxpPort;
 	IMU imu;
-	double l = 19.0;
-	double w = 27.0;
+	private static final double L = 19.0;
+	private static final double W = 27.0;
 	private static final double ENCODER_CPR = 414.1666d;
 
 	public static DriveTrain getInstance() {
@@ -32,16 +32,19 @@ public class DriveTrain extends Subsystem {
 	private DriveTrain() {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
-				add(new SwerveWheel(new Vector2d(-l/2, w/2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 288, 862,
+				// Relative Encoder values are not correct
+				add(new SwerveWheel(new Vector2d(-L/2, W/2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 288, 862,
 						11, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
-				add(new SwerveWheel(new Vector2d(-l/2, -w/2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 700, 863,
+				add(new SwerveWheel(new Vector2d(-L/2, -W/2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 700, 863,
 						11, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B 373
-				add(new SwerveWheel(new Vector2d(l/2, -w/2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 752, 867,
+				add(new SwerveWheel(new Vector2d(L/2, -W/2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 752, 867,
 						11, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
-				add(new SwerveWheel(new Vector2d(l/2, w/2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 75, 850,
+				add(new SwerveWheel(new Vector2d(L/2, W/2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 75, 850,
 						11, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
 			}
 		};
+		
+		//Using values from old robot, may not be correct
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
 		imu = new IMU(mxpPort, (byte) 127);
 
@@ -57,8 +60,6 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void relativeDrive(double rotation, Vector2d translation) {
-		if (Math.abs(rotation) < .2)
-			rotation = 0;
 		if (translation.magnitude() < .15)
 			translation = new Vector2d(0, 0);
 
@@ -70,20 +71,25 @@ public class DriveTrain extends Subsystem {
 
 		System.out.println("OUT: " + translation);
 
-		/*double a = translation.getX() - rotation * L / 2;
+		double a = translation.getX() - rotation * L / 2;
 		double b = translation.getX() + rotation * L / 2;
 		double c = translation.getY() - rotation * W / 2;
 		double d = translation.getY() + rotation * W / 2;
 
-		wheelA.drive(-Math.atan2(b, c), speed(b, c), 1, normalizer);
-		wheelB.drive(-Math.atan2(b, d), speed(b, d), 2, normalizer);
-		wheelC.drive(-Math.atan2(a, d), speed(a, d), 3, normalizer);
-		wheelD.drive(-Math.atan2(a, c), speed(a, c), 4, normalizer);*/
+		swerveWheels.get(0).relativeDrive(-Math.atan2(b, c), speed(b, c), normalizer);
+		swerveWheels.get(1).relativeDrive(-Math.atan2(b, d), speed(b, d), normalizer);
+		swerveWheels.get(2).relativeDrive(-Math.atan2(a, d), speed(a, d), normalizer);
+		swerveWheels.get(3).relativeDrive(-Math.atan2(a, c), speed(a, c), normalizer);
 
 		normalizer.run();
 		normalizer.clear();
 	}
 
+	private double speed(double x, double y)
+	{
+		return Math.sqrt(x * x + y * y);
+	}
+	
 	public void zeroYaw() {
 		imu.zeroYaw();
 	}
