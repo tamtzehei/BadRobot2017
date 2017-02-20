@@ -39,7 +39,7 @@ public class SwerveWheel {
 
 		pivot.changeControlMode(TalonControlMode.Position);
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
-		pivot.setPID(16, 0, 0);
+		pivot.setPID(32, 0, 0);
 		pivot.enableControl();
 	}
 

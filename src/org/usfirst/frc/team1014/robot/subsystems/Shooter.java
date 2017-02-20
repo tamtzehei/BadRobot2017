@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1014.robot.subsystems;
 
+import org.usfirst.frc.team1014.robot.RobotMap;
+
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -15,9 +17,11 @@ public class Shooter extends Subsystem {
 		return shooter;
 	}
 
-	private Shooter() {
+	public Shooter() {
 		super();
-
+		
+		shoot = new CANTalon(RobotMap.SHOOTER_MOTOR);
+		rotater = new CANTalon(RobotMap.ROTATER_MOTOR);
 	}
 
 	public void shoot(double speed) {

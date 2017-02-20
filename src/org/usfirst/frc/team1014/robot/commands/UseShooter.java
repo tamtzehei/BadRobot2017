@@ -8,18 +8,15 @@ import edu.wpi.first.wpilibj.command.Command;
 public class UseShooter extends Command {
 
 	Shooter shooter;
-	public static double speed;
 
-	public UseShooter() {
-		requires(shooter.getInstance());
-		speed = 1;
+	protected void initialize() {
+		shooter = new Shooter();
 	}
 
 	protected void execute() {
-		if (OI.xboxController0.getYButton()) {
-			shooter.rotateFeeder(speed);
-			shooter.shoot(speed);
-		}
+		shooter.shoot(-OI.xboxController1.getRawAxis(5));
+		shooter.rotateFeeder(-OI.xboxController1.getRawAxis(1));
+		
 	}
 
 	@Override

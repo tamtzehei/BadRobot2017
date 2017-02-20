@@ -8,8 +8,9 @@ import org.usfirst.frc.team1014.robot.util.Vector2d;
 import org.usfirst.frc.team1014.robot.utils.SpeedControllerNormalizer;
 import org.usfirst.frc.team1014.robot.utils.SwerveWheel;
 
-import com.ctre.CANTalon;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -17,8 +18,12 @@ public class DriveTrain extends Subsystem {
 	private static DriveTrain instance;
 	SpeedControllerNormalizer normalizer;
 	List<SwerveWheel> swerveWheels;
+
+	AHRS navx;
+
 	SerialPort mxpPort;
 	IMU imu;
+	
 	private static final double L = 19.0;
 	private static final double W = 27.0;
 	private static final double ENCODER_CPR = 414.1666d;
@@ -33,27 +38,38 @@ public class DriveTrain extends Subsystem {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
 				// Relative Encoder values are not correct
-				add(new SwerveWheel(new Vector2d(-L/2, W/2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 288, 862,
-						11, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
-				add(new SwerveWheel(new Vector2d(-L/2, -W/2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 700, 863,
-						11, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B 373
-				add(new SwerveWheel(new Vector2d(L/2, -W/2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 752, 867,
-						11, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
-				add(new SwerveWheel(new Vector2d(L/2, W/2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 75, 850,
-						11, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
+				add(new SwerveWheel(new Vector2d(12.75, 11), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 334, 888,
+						13, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
+				add(new SwerveWheel(new Vector2d(-12.75, 11), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 360, 867,
+						13, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B
+				add(new SwerveWheel(new Vector2d(-12.75, -11), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 199, 882,
+						13, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
+				add(new SwerveWheel(new Vector2d(12.75, -11), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 731, 888,
+						13, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
 			}
 		};
-		
-		//Using values from old robot, may not be correct
+
+		// Using values from old robot, may not be correct
 		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
 		imu = new IMU(mxpPort, (byte) 127);
-
+		//navx = new AHRS(SPI.Port.kMXP);
+		imu.zeroYaw();
+		
 		normalizer = new SpeedControllerNormalizer();
 	}
+	
+	public void zeroYaw(){
+		imu.zeroYaw();
+		
+	}
 
-	public void drive(final double rotation, final Vector2d translation) {
+	public void drive(final double rotation, Vector2d translation) {
 
-		swerveWheels.forEach((w) -> w.drive(translation, rotation, normalizer));
+		final Vector2d move = translation.rotateDegrees(imu.getYaw() * -1);
+		
+		System.out.println(imu.getYaw());
+		
+		swerveWheels.forEach((w) -> w.drive(move, rotation, normalizer));
 
 		normalizer.run();
 		normalizer.clear();
@@ -63,7 +79,7 @@ public class DriveTrain extends Subsystem {
 		if (translation.magnitude() < .15)
 			translation = new Vector2d(0, 0);
 
-		double robotAngle = Math.toRadians(imu.getYaw());
+		double robotAngle = Math.toRadians(navx.getYaw());
 
 		translation = new Vector2d(
 				translation.getX() * Math.cos(robotAngle) - translation.getY() * Math.sin(robotAngle),
@@ -85,13 +101,8 @@ public class DriveTrain extends Subsystem {
 		normalizer.clear();
 	}
 
-	private double speed(double x, double y)
-	{
+	private double speed(double x, double y) {
 		return Math.sqrt(x * x + y * y);
-	}
-	
-	public void zeroYaw() {
-		imu.zeroYaw();
 	}
 
 	@Override
