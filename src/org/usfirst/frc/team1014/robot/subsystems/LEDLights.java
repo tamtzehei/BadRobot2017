@@ -21,7 +21,7 @@ public class LEDLights
 	
 	public enum LEDState
 	{
-		kDEFAULT, kRED, kBLUE, k1014COLOR, kRAINBOW, kLOW_BATTERY, kJOIN_BLUE, kJOIN_RED, kSHOOT, kGATHER, kGEAR, kCLIMB;
+		kDEFAULT, kRED, kBLUE, k1014COLOR, kRAINBOW, kLOW_BATTERY, kJOIN_BLUE, kJOIN_RED, kSHOOT, kAMERICA, kGEAR, kCLIMB, kBLUEDRIVE, kREDDRIVE;
 	}
 	
 	public void setLights(LEDState state)
@@ -56,14 +56,20 @@ public class LEDLights
 			case kSHOOT:
 				bit1.pulse(0.00016f); //as it shoots sets colors 
 				break;
-			case kGATHER:
+			case kAMERICA:
 				bit1.pulse(0.00018f); // as it gathers balls
 				break;
 			case kGEAR:
-				bit1.pulse(0.00020f); // as it places a gear
+				bit1.pulse(0.00020f); // as it places a gear blue and yellow
 				break;
 			case kCLIMB:
 				bit1.pulse(0.00022f); // as it climbs the rope	
+				break;
+			case kBLUEDRIVE:
+				bit1.pulse(0.00024f); // as it drives for blue team
+				break;
+			case kREDDRIVE:
+				bit1.pulse(0.00026f); //as it drives for red team
 				break;
 		}
 	}

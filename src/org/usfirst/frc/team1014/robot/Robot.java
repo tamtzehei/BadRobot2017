@@ -23,13 +23,6 @@ public class Robot extends IterativeRobot {
 	TeleopGroup teleopGroup;
 	AutoGroup autoGroup;
 	TestGroup testGroup;
-	
-	boolean lightsRed = false;
-	boolean lightsSomething = false;
-	boolean lightsBlue = false;
-	boolean lightsRainbow = false;
-	boolean lightsVal = false;
-
 	public static OI oi;
 
 	/**
