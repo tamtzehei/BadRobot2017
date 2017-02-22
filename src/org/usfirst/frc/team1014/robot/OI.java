@@ -13,7 +13,7 @@ public class OI {
 	
 	public OI() {
 		xboxController0 = new XboxController(0);
-		xboxController1 = new XboxController(0);
+		xboxController1 = new XboxController(1);
 	}
 
 }

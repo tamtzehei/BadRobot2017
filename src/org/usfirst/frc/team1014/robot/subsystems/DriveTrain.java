@@ -21,11 +21,8 @@ public class DriveTrain extends Subsystem {
 
 	AHRS navx;
 
-	SerialPort mxpPort;
-	IMU imu;
-	
-	private static final double L = 19.0;
-	private static final double W = 27.0;
+	private static final double L = .69;
+	private static final double W = .48;
 	private static final double ENCODER_CPR = 414.1666d;
 
 	public static DriveTrain getInstance() {
@@ -38,37 +35,37 @@ public class DriveTrain extends Subsystem {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
 				// Relative Encoder values are not correct
-				add(new SwerveWheel(new Vector2d(12.75, 11), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A, 334, 888,
-						13, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
-				add(new SwerveWheel(new Vector2d(-12.75, 11), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B, 360, 867,
-						13, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B
-				add(new SwerveWheel(new Vector2d(-12.75, -11), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C, 199, 882,
-						13, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
-				add(new SwerveWheel(new Vector2d(12.75, -11), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D, 731, 888,
-						13, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
+				add(new SwerveWheel("A", "left",new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A,
+						789, 888, 13, RobotMap.PIVOT_ENCODER_AA, RobotMap.PIVOT_ENCODER_AB, ENCODER_CPR)); // A
+				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B,
+						99, 867, 13, RobotMap.PIVOT_ENCODER_BA, RobotMap.PIVOT_ENCODER_BB, ENCODER_CPR)); // B
+				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C,
+						118, 882, 13, RobotMap.PIVOT_ENCODER_CA, RobotMap.PIVOT_ENCODER_CB, ENCODER_CPR)); // C
+				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D,
+						701, 888, 13, RobotMap.PIVOT_ENCODER_DA, RobotMap.PIVOT_ENCODER_DB, ENCODER_CPR)); // D
 			}
 		};
+		
+		
 
 		// Using values from old robot, may not be correct
-		mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
-		imu = new IMU(mxpPort, (byte) 127);
-		//navx = new AHRS(SPI.Port.kMXP);
-		imu.zeroYaw();
-		
+		// mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
+		// imu = new IMU(mxpPort, (byte) 127);
+		navx = new AHRS(SPI.Port.kMXP);
+		navx.zeroYaw();
+
 		normalizer = new SpeedControllerNormalizer();
 	}
-	
-	public void zeroYaw(){
-		imu.zeroYaw();
-		
+
+	public void zeroYaw() {
+		navx.zeroYaw();
+
 	}
 
 	public void drive(final double rotation, Vector2d translation) {
 
-		final Vector2d move = translation.rotateDegrees(imu.getYaw() * -1);
-		
-		System.out.println(imu.getYaw());
-		
+		final Vector2d move = translation.rotateDegrees(navx.getYaw() * -1);
+
 		swerveWheels.forEach((w) -> w.drive(move, rotation, normalizer));
 
 		normalizer.run();
@@ -103,6 +100,23 @@ public class DriveTrain extends Subsystem {
 
 	private double speed(double x, double y) {
 		return Math.sqrt(x * x + y * y);
+	}
+
+	public void tankDrive(double rightStick, double leftStick, double encoderPosition) {
+
+		swerveWheels.forEach((w) -> w.tankDrive(rightStick, leftStick, encoderPosition));
+
+	}
+
+	public double getAngleOfBrokenWheel() {
+
+		for (SwerveWheel w : swerveWheels) {
+			if (w.isBroken())
+				return w.getEncoderPosition();
+		}
+
+		return 0;
+
 	}
 
 	@Override

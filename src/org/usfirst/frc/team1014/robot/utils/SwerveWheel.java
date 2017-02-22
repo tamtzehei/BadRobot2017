@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1014.robot.utils;
 
+import java.util.List;
+
 import org.usfirst.frc.team1014.robot.util.Vector2d;
 
 import com.ctre.CANTalon;
@@ -20,17 +22,20 @@ public class SwerveWheel {
 	double finalPosition;
 	Encoder encoder;
 	private double encoderCPR;
+	String id, tankId;
 
-	public SwerveWheel(Vector2d location, int driveMotorPin, int pivotMotorPin, double offset, double encoderMax,
-			double encoderMin, int encoderAPin, int encoderBPin, double encoderCPR) {
+	public SwerveWheel(String id, String tankId, Vector2d location, int driveMotorPin, int pivotMotorPin, double offset,
+			double encoderMax, double encoderMin, int encoderAPin, int encoderBPin, double encoderCPR) {
 
+		this.id = id;
+		this.tankId = tankId;
 		this.encoderCPR = encoderCPR;
 		this.offset = offset;
 		this.encoderMax = encoderMax;
 		this.encoderMin = encoderMin;
 		range = encoderMax - encoderMin;
 
-		perpendicular = location.perpendicularCW();
+		perpendicular = location.perpendicularCW().rotateDegrees(90);
 		perpendicular = perpendicular.normalize();
 
 		drive = new CANTalon(driveMotorPin);
@@ -41,6 +46,7 @@ public class SwerveWheel {
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
 		pivot.setPID(32, 0, 0);
 		pivot.enableControl();
+		
 	}
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
@@ -53,6 +59,9 @@ public class SwerveWheel {
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
+
+		System.out.println(id + ": " + rawCurrent);
+
 		double currentRadians = (Math.PI * 2.0 * (rawCurrent - offset)) / range;
 
 		Vector2d currentVector = new Vector2d(Math.cos(currentRadians), Math.sin(currentRadians));
@@ -114,7 +123,7 @@ public class SwerveWheel {
 	public double getFinalPosition(double rawFinal, double currentPosition) {
 		finalPosition = rawFinal + Math.floor(currentPosition / 1024.0) * 1024.0;
 
-		// Account for the encoder crossing 0 or 1024 
+		// Account for the encoder crossing 0 or 1024
 		if ((finalPosition - currentPosition) > (range / 4.0))
 			finalPosition -= 1024.0;
 
@@ -149,5 +158,48 @@ public class SwerveWheel {
 
 	public double getAngle() {
 		return ((double) encoder.get()) / encoderCPR;
+	}
+
+	public double getEncoderPosition() {
+		return pivot.getPosition();
+	}
+
+	public void tankDrive(double rightInput, double leftInput, double encoderPosition) {
+		
+		pivot.set(encoderPosition);
+
+		if(tankId.equals("right")){
+			drive.set(rightInput);
+		}
+		if(tankId.equals("left")){
+			drive.set(leftInput);
+		}
+
+	}
+
+	// returns true if wheel fails to respond
+	public boolean isBroken() {
+		double currentReference = pivot.getPosition();
+		double testSet = currentReference + range / 4;
+
+		// Since the position can go outside of range this check is not needed
+		/*
+		 * if (testSet % 1024 > encoderMax || testSet % 1024 < encoderMin)
+		 * testSet += (1024 - range);
+		 */
+		pivot.set(testSet);
+		if (Math.abs(pivot.getPosition() - testSet) > 20)
+			return true;
+
+		testSet = currentReference - range / 4;
+		/*
+		 * if (testSet % 1024 > encoderMax || testSet % 1024 < encoderMin)
+		 * testSet += (1024 - range);
+		 */
+		pivot.set(testSet);
+		if (Math.abs(pivot.getPosition() - testSet) > 20)
+			return true;
+
+		return false;
 	}
 }
