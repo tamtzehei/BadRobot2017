@@ -7,6 +7,11 @@ import org.usfirst.frc.team1014.robot.commands.TestGroup;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+
+import org.usfirst.frc.team1014.robot.commands.CommandBase;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -22,8 +27,6 @@ public class Robot extends IterativeRobot {
 	TeleopGroup teleopGroup;
 	AutoGroup autoGroup;
 	TestGroup testGroup;
-	
-	CANTalon climbTalon = new CANTalon(30);
 
 	public static OI oi;
 
@@ -37,6 +40,11 @@ public class Robot extends IterativeRobot {
 		teleopGroup = new TeleopGroup();
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
+		
+		if(CommandBase.lights != null)
+		{	
+			CommandBase.lights.setLights(LEDState.kDEFAULT);
+		}
 	}
 	
 	/*
