@@ -24,6 +24,7 @@ public class SwerveWheel {
 	private double encoderCPR;
 	String id, tankId;
 
+
 	public SwerveWheel(String id, String tankId, Vector2d location, int driveMotorPin, int pivotMotorPin, double offset,
 			double encoderMax, double encoderMin, int encoderAPin, int encoderBPin, double encoderCPR) {
 
@@ -54,8 +55,8 @@ public class SwerveWheel {
 		double speed = 0.0;
 		double negativeIfInverted = 1.0;
 
-		// Magnitude of rotation cancels out with radius of circle of rotation
-		move = translation.add(perpendicular.scale(rotation));
+
+		Vector2d move = translation.add(perpendicular.scale(rotation));
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
@@ -90,6 +91,7 @@ public class SwerveWheel {
 
 		normalizer.add(drive, speed);
 	}
+
 
 	/**
 	 * 
@@ -183,6 +185,7 @@ public class SwerveWheel {
 		double testSet = currentReference + range / 4;
 
 		// Since the position can go outside of range this check is not needed
+
 		/*
 		 * if (testSet % 1024 > encoderMax || testSet % 1024 < encoderMin)
 		 * testSet += (1024 - range);
@@ -201,5 +204,6 @@ public class SwerveWheel {
 			return true;
 
 		return false;
+
 	}
 }
