@@ -2,8 +2,16 @@ package org.usfirst.frc.team1014.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+/**
+This is a class that adds methods to the Joystick class spesific to Xbox
+controllers. This ensures that you are not using magic numbers for axis or
+button ids in the project.
+*/
 public class XboxController extends Joystick {
 
+	/*
+	 * These values are from the Driver Station controller tabs.
+	 */
 	private static int LEFT_STICK_X = 0, LEFT_STICK_Y = 1, RIGHT_STICK_X = 4, RIGHT_STICK_Y = 5, A_BUTTON = 1,
 			B_BUTTON = 2, X_BUTTON = 3, Y_BUTTON = 4, LB = 5, RB = 6, SELECT = 7, START = 8, LEFT_JOY_CLICK = 9,
 			RIGHT_JOY_CLICK = 10, LEFT_TRIGGER = 2, RIGHT_TRIGGER = 3;
