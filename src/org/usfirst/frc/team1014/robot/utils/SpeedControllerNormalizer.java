@@ -22,7 +22,7 @@ public class SpeedControllerNormalizer {
 	private List<UnsetSpeedController> controllers = new ArrayList<>();
 
 	public void add(SpeedController controller, double speed) {
-		maxSpeed = Math.max(Math.abs(speed), Math.abs(maxSpeed));
+		maxSpeed = Math.max(Math.abs(speed), maxSpeed);
 		controllers.add(new UnsetSpeedController(controller, speed));
 	}
 
@@ -35,5 +35,6 @@ public class SpeedControllerNormalizer {
 
 	public void clear() {
 		controllers.clear();
+		maxSpeed = 0;
 	}
 }
