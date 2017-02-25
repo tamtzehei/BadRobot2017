@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team1014.robot.RobotMap;
-import org.usfirst.frc.team1014.robot.util.Vector2d;
 import org.usfirst.frc.team1014.robot.utils.SpeedControllerNormalizer;
 import org.usfirst.frc.team1014.robot.utils.SwerveWheel;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
 import com.kauailabs.navx.frc.AHRS;
 

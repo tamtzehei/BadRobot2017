@@ -2,8 +2,6 @@ package org.usfirst.frc.team1014.robot.utils;
 
 import java.util.List;
 
-import org.usfirst.frc.team1014.robot.util.Vector2d;
-
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1014.robot.util;
+package org.usfirst.frc.team1014.robot.utils;
 
 public class Vector2d {
 	private final double x, y;
