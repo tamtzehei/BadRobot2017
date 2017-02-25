@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1014.robot.utils;
 
 public class SmartDashboard {
-	
+
 	private static SmartDashboard smartDashboard;
 
 	public static SmartDashboard getInstance()
@@ -12,7 +12,4 @@ public class SmartDashboard {
 		}
 		return smartDashboard;
 	}
-	
-	
-	
 }

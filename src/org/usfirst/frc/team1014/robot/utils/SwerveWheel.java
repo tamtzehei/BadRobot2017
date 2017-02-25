@@ -47,7 +47,6 @@ public class SwerveWheel {
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
 		pivot.setPID(32, 0, 0);
 		pivot.enableControl();
-		
 	}
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
@@ -94,7 +93,7 @@ public class SwerveWheel {
 
 
 	/**
-	 * 
+	 *
 	 * @param move
 	 *            - vector robot should move
 	 * @return - the final encoder value between the max and min
@@ -115,7 +114,7 @@ public class SwerveWheel {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param rawFinal
 	 *            - the final encoder value between the max and min
 	 * @param currentPosition
@@ -167,7 +166,6 @@ public class SwerveWheel {
 	}
 
 	public void tankDrive(double rightInput, double leftInput, double encoderPosition) {
-		
 		pivot.set(encoderPosition);
 
 		if(tankId.equals("right")){

@@ -15,14 +15,14 @@ public class Gather extends Subsystem
 	{
 		super();
 	}
-	
+
 	public static Gather getInstance()
 	{
 		if (instance == null)
 			instance = new Gather();
 		return instance;
 	}
-	
+
 	protected void initialize()
 	{
 		gatherMotor = new CANTalon(ControlsManager.GATHERMOTOR);
@@ -32,11 +32,9 @@ public class Gather extends Subsystem
 	{
 		gatherMotor.set(speed);
 	}
-	
+
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

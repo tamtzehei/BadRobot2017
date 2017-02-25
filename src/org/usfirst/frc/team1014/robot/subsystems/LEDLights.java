@@ -2,12 +2,12 @@ package org.usfirst.frc.team1014.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 
-public class LEDLights 
+public class LEDLights
 {
 	private static LEDLights instance;
 	private DigitalOutput bit1;
 	private final int channel = 4;
-	
+
 	public LEDLights()
 	{
 		bit1 = new DigitalOutput(channel); //temporary
@@ -18,17 +18,16 @@ public class LEDLights
 			instance = new LEDLights();
 		return instance;
 	}
-	
+
 	public enum LEDState
 	{
 		kDEFAULT, kRED, kBLUE, k1014COLOR, kRAINBOW, kLOW_BATTERY, kJOIN_BLUE, kJOIN_RED, kSHOOT, kAMERICA, kGEAR, kCLIMB, kBLUEDRIVE, kREDDRIVE;
 	}
-	
+
 	public void setLights(LEDState state)
 	{
 		switch(state)
 		{
-			
 			case kDEFAULT:
 				bit1.pulse(0.00f); //Meeting two colors red and blue when turned on
 				break;
@@ -54,7 +53,7 @@ public class LEDLights
 				bit1.pulse(0.00014f); //meets colors finishes red
 				break;
 			case kSHOOT:
-				bit1.pulse(0.00016f); //as it shoots sets colors 
+				bit1.pulse(0.00016f); //as it shoots sets colors
 				break;
 			case kAMERICA:
 				bit1.pulse(0.00018f); // as it gathers balls
@@ -63,7 +62,7 @@ public class LEDLights
 				bit1.pulse(0.00020f); // as it places a gear blue and yellow
 				break;
 			case kCLIMB:
-				bit1.pulse(0.00022f); // as it climbs the rope	
+				bit1.pulse(0.00022f); // as it climbs the rope
 				break;
 			case kBLUEDRIVE:
 				bit1.pulse(0.00024f); // as it drives for blue team

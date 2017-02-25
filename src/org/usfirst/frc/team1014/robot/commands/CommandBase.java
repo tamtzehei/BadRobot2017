@@ -5,12 +5,12 @@ import org.usfirst.frc.team1014.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public abstract class CommandBase extends Command 
+public abstract class CommandBase extends Command
 {
 	public static LEDLights lights;
 	public static Shooter shooter;
 	public static Gather gatherer;
-	
+
 	public static void init()
 	{
 		lights = LEDLights.getInstance();
@@ -25,8 +25,7 @@ public abstract class CommandBase extends Command
 	{
 		super();
 	}
-	
-	
+
 	protected abstract void initialize();
 
 	/**
