@@ -40,7 +40,7 @@ Swerve drive can be implemented with any number of modules greater than or equal
 to three. The modules must be rigidly mounted to the frame, even a few degrees
 of freedom will cause the control loop to stutter. There are no requirements on
 the positions on the robot, but it is most efficient to place the wheels in a
-symetrical pattern. The modules should not be named by their position but by
+symmetrical pattern. The modules should not be named by their position but by
 another naming scheme to prevent bad implementation in code, but they should
 follow a simple order; for example naming them in a counterclockwise order. In
 an ideal construction each wheel is at the exact same distance from the center,
@@ -79,20 +79,20 @@ Swerve can be implemented with both relative or absolute encoders.
 
 .Relative Encoders
 If you use relative encoders you first need to calculate their CPR (counts per
-rotation).  This value needs to be calculated from the datasheets and
+rotation).  This value needs to be calculated from the data sheets and
 multiplying by the gear ratios. This value needs to be very accurate to prevent
 building up error. The hard part is centering the encoders. You can either use
 an indexing method where you have a way of detecting when pass a certain point.
 This usually either requires running at a lower speed or it will have a high
 error. The other way is to move the modules to the center location before
-starting the robot, or to have a button that recenters the encoders. The latter
-will not work in a competition where you cann't access the robot.
+starting the robot, or to have a button that re-centers the encoders. The latter
+will not work in a competition where you can't access the robot.
 
 .Absolute Encoders
-Absolute encoders are the prefered way to run swerve. They do not need to be
+Absolute encoders are the preferred way to run swerve. They do not need to be
 set up each time, only when you change the modules or the encoders. Absolute
 encoders are usually handled as analog input devices so you do not need an
-encoder spesific CPR calculation as long as you have a 1:1 encoder-pivot ratio.
+encoder specific CPR calculation as long as you have a 1:1 encoder-pivot ratio.
 
 Keying Modules
 ~~~~~~~~~~~~~~
@@ -105,7 +105,7 @@ come loose and the module will stop driving. The solution to this is to insert a
 key into the shaft. Even with loctite these keys will fall out with enough use.
 Because of this you should have at least one spare module and someone who knows
 how to properly rekey a module. If not handled properly this can make swerve
-unreliable and massivly slow down development. This is an issue that any teams
+unreliable and massively slow down development. This is an issue that any teams
 that use these types of modules need to be aware of. Design of the robot should
 take these factors into consideration and ensure that modules can be removed
 quickly.
@@ -129,9 +129,9 @@ second needs to converted to a rotation vector. This is done by creating a
 vector that is perpendicular to the location of the module from the center.
 The magnitude of this vector needs to be equal to the magnitude of rotation
 (to get the right turning speed) multiplied by the radius from the center (so,
-in a wierd module layout, modules further from the center will turn faster).
-The second variable can cancel out with the perpenducular vector if its
-magintude is maintained so you can just multiply omega by the perpendicular
+in a weird module layout, modules further from the center will turn faster).
+The second variable can cancel out with the perpendicular vector if its
+magnitude is maintained so you can just multiply omega by the perpendicular
 vector (if you can't do this you need to normalize the perpendicular vector,
 and scale it by omega and the radius). Every swerve module will have a different
 rotation vector because they are all at different location on the robot. The sum
@@ -151,8 +151,8 @@ is to use a PID enabled motor controller to handle it for you.
 Normalizing Drive Speeds
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-There is a posibility, due to summing two vectors, that the magnitude of the
-vector of a module is larger than one. A robot will drive acceptibly with this,
+There is a possibility, due to summing two vectors, that the magnitude of the
+vector of a module is larger than one. A robot will drive acceptably with this,
 but it will likely drift when driving in a direction and turning will be slower.
 The fix for this is to normalize the speeds before setting them. There are two
 ways to do this: worse case normalization and max speed normalization.
@@ -173,12 +173,12 @@ close to the translation.
 The other way is to, instead of setting the speed controllers directly, making
 a list of each controller with its speed. When you add a controller to this list
 save a max value equal to the larger of the current max value and the absolute
-value of the speed (absolute value prevents inverting motors accidentaly).
+value of the speed (absolute value prevents inverting motors accidentally).
 Then, with each update, you can use this speed in the same way as in worst case
 normalization. This is slower because each module needs to factor in its speed
 and then only the max is used. This has an `O(n)` growth to determine the
 scalar, but when `n` is the number of modules, usually 4, it doesn't make much
-of a difference computationally. This normalization method garantees that the
+of a difference computationally. This normalization method guarantees that the
 highest speed will be one if the highest speed is greater than or equal to one.
 
 Field-centric drive
