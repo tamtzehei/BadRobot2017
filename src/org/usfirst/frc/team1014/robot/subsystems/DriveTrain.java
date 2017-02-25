@@ -48,9 +48,6 @@ public class DriveTrain extends Subsystem {
 		
 		
 
-		// Using values from old robot, may not be correct
-		// mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
-		// imu = new IMU(mxpPort, (byte) 127);
 		navx = new AHRS(SPI.Port.kMXP);
 		navx.zeroYaw();
 
