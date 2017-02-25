@@ -182,7 +182,7 @@ public class SwerveWheel {
 	// returns true if wheel fails to respond
 	public boolean isBroken() {
 		double currentReference = pivot.getPosition();
-		double testSet = currentReference + range / 4;
+		double testSet = currentReference + (range / 4.0) - 10.0 ;
 
 		// Since the position can go outside of range this check is not needed
 
@@ -194,7 +194,7 @@ public class SwerveWheel {
 		if (Math.abs(pivot.getPosition() - testSet) > 20)
 			return true;
 
-		testSet = currentReference - range / 4;
+		testSet = currentReference - (range / 4.0) + 10.0;
 		/*
 		 * if (testSet % 1024 > encoderMax || testSet % 1024 < encoderMin)
 		 * testSet += (1024 - range);
