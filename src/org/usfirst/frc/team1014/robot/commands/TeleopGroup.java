@@ -6,6 +6,8 @@ public class TeleopGroup extends CommandGroup {
 	
 	public TeleopGroup() {
 		this.addParallel(new TeleDrive());
+		this.addParallel(new UseShooter());
 	}
 
 }
+

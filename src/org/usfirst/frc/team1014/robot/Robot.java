@@ -4,6 +4,14 @@ import org.usfirst.frc.team1014.robot.commands.AutoGroup;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
 
+import com.ctre.CANTalon;
+
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+
+import org.usfirst.frc.team1014.robot.commands.CommandBase;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights;
+import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -32,11 +40,17 @@ public class Robot extends IterativeRobot {
 		teleopGroup = new TeleopGroup();
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
+		
+		if(CommandBase.lights != null)
+		{	
+			CommandBase.lights.setLights(LEDState.kDEFAULT);
+		}
 	}
 	
 	/*
 	 * An Init function is called whenever the robot changes state.
 	 */
+	
 	private void stateChangeInit() {
 		Scheduler.getInstance().removeAll();
 	}
@@ -65,10 +79,8 @@ public class Robot extends IterativeRobot {
 	}
 	
 	/*
-	 * Periodic commands are called every 20ms by the system. If it does not
-	 * return within 20ms it will wait until the last one returned before
-	 * calling it again. The one that is called depends on the state of the
-	 * robot at the time.
+	 * Periodic commands are called every 20m by the system. If it does not
+	 * return within 20ms it will wait until the last one returned. 
 	 */
 
 	/**
@@ -83,6 +95,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
+		climbTalon.set(oi.xboxController0.getTriggerAxis(Hand.kLeft) - oi.xboxController0.getTriggerAxis(Hand.kRight));
 	}
 
 	@Override
@@ -99,4 +112,3 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 	}
 }
-
