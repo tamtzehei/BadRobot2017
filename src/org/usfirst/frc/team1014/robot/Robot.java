@@ -37,7 +37,6 @@ public class Robot extends IterativeRobot {
 	/*
 	 * An Init function is called whenever the robot changes state.
 	 */
-	
 	private void stateChangeInit() {
 		Scheduler.getInstance().removeAll();
 	}
@@ -66,10 +65,17 @@ public class Robot extends IterativeRobot {
 	}
 	
 	/*
-	 * Periodic commands are called every 20m by the system. If it does not
-	 * return within 20ms it will wait until the last one returned. 
+	 * Periodic commands are called every 20ms by the system. If it does not
+	 * return within 20ms it will wait until the last one returned before
+	 * calling it again. The one that is called depends on the state of the
+	 * robot at the time.
 	 */
 
+	/**
+	 * A method that is called by each of the periodic functions on the
+	 * robot. This is our implementation and is to prevent reused code
+	 * in the systems periodic methods.
+	 */
 	private void periodic() {
 		Scheduler.getInstance().run();
 	}
