@@ -1,0 +1,195 @@
+Swerve Drive
+============
+:Author: Dominik Winecki
+:Email: <dominikwinecki@gmail.com>
+
+By {author} {email}
+
+Overview
+--------
+
+Swerve drive is a drive train where each wheel (module) can both spin and rotate
+independently of all other wheels. A swerve drive train can be configured to run
+different types of drive algorithms. They can have a fixed rotation and run in
+tank mode. You can mirror one of the modules on the rest of them which allows
+the robot to have a translation but not a rotation. The most complex swerve
+system can use vectors to apply a translation and a rotation at the same time.
+This allows the robot to drive in a direction while spinning, and it can
+integrate any other drive maneuver so it can still strafe/drive and rotate
+independently.
+
+Comparison with Mecanum
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Mecanum drive is a drive train that uses (usually four) wheels where each wheel
+is comprised of smaller freely-rotating wheels at a 45 degree angle. This system
+can also move in an omni-directional pattern. Mecanum is simpler to implement
+and is more robust due to only having one motor per wheel and less reliant on
+encoders. The downside is that mecanum has lower performance on turning and
+strafing because it has to drive motors against each other to perform these
+actions. Mecanum also has very low traction compared to other types of drives.
+Mecanum only provides enough force to move the robot and push light objects.
+If another robot pushes a mecanum robot it will provide no resistance will be
+pinned. Swerve has the full power of a tank drive at any angle making it one of
+the most powerful drive trains used.
+
+Physical Construction
+---------------------
+
+Swerve drive can be implemented with any number of modules greater than or equal
+to three. The modules must be rigidly mounted to the frame, even a few degrees
+of freedom will cause the control loop to stutter. There are no requirements on
+the positions on the robot, but it is most efficient to place the wheels in a
+symetrical pattern. The modules should not be named by their position but by
+another naming scheme to prevent bad implementation in code, but they should
+follow a simple order; for example naming them in a counterclockwise order. In
+an ideal construction each wheel is at the exact same distance from the center,
+this allows the robot to turn at the maximum speed.
+
+These are examples of good swerve constructions:
+
+----
+                            B------------A
+                            |            |
+                            |            |
+                            |            |
+                            |            |
+                            |            |
+                            C------------D
+----
+
+----
+                            B------------A
+                           /              \
+                          /                \
+                         /                  \
+                        /                    \
+                       C                      F
+                        \                    /
+                         \                  /
+                          \                /
+                           \              /
+                            D------------E
+----
+
+Encoders
+~~~~~~~~
+
+Swerve can be implemented with both relative or absolute encoders.
+
+.Relative Encoders
+If you use relative encoders you first need to calculate their CPR (counts per
+rotation).  This value needs to be calculated from the datasheets and
+multiplying by the gear ratios. This value needs to be very accurate to prevent
+building up error. The hard part is centering the encoders. You can either use
+an indexing method where you have a way of detecting when pass a certain point.
+This usually either requires running at a lower speed or it will have a high
+error. The other way is to move the modules to the center location before
+starting the robot, or to have a button that recenters the encoders. The latter
+will not work in a competition where you cann't access the robot.
+
+.Absolute Encoders
+Absolute encoders are the prefered way to run swerve. They do not need to be
+set up each time, only when you change the modules or the encoders. Absolute
+encoders are usually handled as analog input devices so you do not need an
+encoder spesific CPR calculation as long as you have a 1:1 encoder-pivot ratio.
+
+Keying Modules
+~~~~~~~~~~~~~~
+
+Some commercial swerve modules (mainly the am-3009) use a friction join between
+the drive motor and the wheel. This is done because if the key comes loose and
+it falls into the gears it could jam and potentially damage the module. The down
+side of this is that the friction connection between the shaft and the gear will
+come loose and the module will stop driving. The solution to this is to insert a
+key into the shaft. Even with loctite these keys will fall out with enough use.
+Because of this you should have at least one spare module and someone who knows
+how to properly rekey a module. If not handled properly this can make swerve
+unreliable and massivly slow down development. This is an issue that any teams
+that use these types of modules need to be aware of. Design of the robot should
+take these factors into consideration and ensure that modules can be removed
+quickly.
+
+Programming
+----------
+
+The design of a swerve drive train in code should be split into two parts:
+centering and vector math. The output of a swerve algorithm is a vector for each
+wheel. It is up to the programmers to decide how to center the wheels at any
+angle.
+
+Vector Math Algorithm
+~~~~~~~~~~~~~~~~~~~~~
+
+The input of a swerve drive train is a translation vector and a rotation.
+The rotation is in radians per second and it is the angular velocity so in a
+diagram it is represented with the greek lower case omega. Radians are used for
+this because an angle is formed on the tangent of a circle. The rotations per
+second needs to converted to a rotation vector. This is done by creating a
+vector that is perpendicular to the location of the module from the center.
+The magnitude of this vector needs to be equal to the magnitude of rotation
+(to get the right turning speed) multiplied by the radius from the center (so,
+in a wierd module layout, modules further from the center will turn faster).
+The second variable can cancel out with the perpenducular vector if its
+magintude is maintained so you can just multiply omega by the perpendicular
+vector (if you can't do this you need to normalize the perpendicular vector,
+and scale it by omega and the radius). Every swerve module will have a different
+rotation vector because they are all at different location on the robot. The sum
+of the translation and rotation vectors will create the vector for each wheel.
+
+Centering Wheels
+~~~~~~~~~~~~~~~~
+
+Centering each wheel is the most difficult of the algorithm. This would ideally
+take no time and each vector is applied instantly, so the centering method needs
+to be fast. Centering a wheel requires you to move the module either in the
+direction of the vector or its inverse. If you go to the inverse you need to
+negate the magnitude of the vector as the speed output. This makes sure that a
+module never needs to turn more than 90 degrees. The ideal way to center a wheel
+is to use a PID enabled motor controller to handle it for you.
+
+Normalizing Drive Speeds
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is a posibility, due to summing two vectors, that the magnitude of the
+vector of a module is larger than one. A robot will drive acceptibly with this,
+but it will likely drift when driving in a direction and turning will be slower.
+The fix for this is to normalize the speeds before setting them. There are two
+ways to do this: worse case normalization and max speed normalization.
+
+.Worse Case Normalization
+Worst case normalization is finding the speed scaling constant based on the
+worst possible value. The max possible speed can be found by adding the sum of
+the translation vector and the rotation vector. This can only happen when the
+translation vector is the highest magnitude in exact same direction as the
+rotation vector. With the formula `s=|t|+|r|`, if `s>1` multiply each speed by
+`1/s`. This is the most efficient algorithm for this task as it takes `O(1)` to
+determine the constant, at the downside of potentially running the robot slower
+than the ideal speed, and usually by a factor of around 5%. This value decreases
+as you add more modules because it becomes more likely that the translation is
+close to the translation.
+
+.Max Speed Normalization
+The other way is to, instead of setting the speed controllers directly, making
+a list of each controller with its speed. When you add a controller to this list
+save a max value equal to the larger of the current max value and the absolute
+value of the speed (absolute value prevents inverting motors accidentaly).
+Then, with each update, you can use this speed in the same way as in worst case
+normalization. This is slower because each module needs to factor in its speed
+and then only the max is used. This has an `O(n)` growth to determine the
+scalar, but when `n` is the number of modules, usually 4, it doesn't make much
+of a difference computationally. This normalization method garantees that the
+highest speed will be one if the highest speed is greater than or equal to one.
+
+Field-centric drive
+~~~~~~~~~~~~~~~~~~~
+
+Field-centric drive is when you have the translation be relative to the field
+the robot is running on. If you are standing with a properly centered
+field-centirc robot pushing the stick up will always drive the robot away from
+you, and all other movements are relative to the driver as well. Implementing
+field-centric on swerve drive can be done by rotating the translation vector by
+the yaw angle from a gyroscope. You also need to add a center button to the
+controller that zeros the yaw. If you face the robot away from you and press the
+center the field-centric it will set the direction. It is also a good idea to
+center this upon boot.
