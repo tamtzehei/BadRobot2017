@@ -95,7 +95,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
-		climbTalon.set(oi.xboxController0.getTriggerAxis(Hand.kLeft) - oi.xboxController0.getTriggerAxis(Hand.kRight));
 	}
 
 	@Override
