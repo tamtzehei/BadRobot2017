@@ -24,9 +24,8 @@ public class SwerveWheel {
 	private double encoderCPR;
 	String id, tankId;
 
-
 	public SwerveWheel(String id, String tankId, Vector2d location, int driveMotorPin, int pivotMotorPin, double offset,
-			double encoderMax, double encoderMin, int encoderAPin, int encoderBPin, double encoderCPR) {
+			double encoderMax, double encoderMin, double encoderCPR) {
 
 		this.id = id;
 		this.tankId = tankId;
@@ -36,25 +35,23 @@ public class SwerveWheel {
 		this.encoderMin = encoderMin;
 		range = encoderMax - encoderMin;
 
-		perpendicular = location.perpendicularCW().rotateDegrees(90);
+		perpendicular = location.perpendicularCW();
 		perpendicular = perpendicular.normalize();
 
 		drive = new CANTalon(driveMotorPin);
 		pivot = new CANTalon(pivotMotorPin);
-		encoder = new Encoder(encoderAPin, encoderBPin);
 
 		pivot.changeControlMode(TalonControlMode.Position);
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
 		pivot.setPID(32, 0, 0);
 		pivot.enableControl();
-		
+
 	}
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
 
 		double speed = 0.0;
 		double negativeIfInverted = 1.0;
-
 
 		Vector2d move = translation.add(perpendicular.scale(rotation));
 
@@ -91,7 +88,6 @@ public class SwerveWheel {
 
 		normalizer.add(drive, speed);
 	}
-
 
 	/**
 	 * 
@@ -135,31 +131,38 @@ public class SwerveWheel {
 		return finalPosition;
 	}
 
-	public void relativeDrive(double angle, double speed, SpeedControllerNormalizer normalizer) {
-		angle /= 2d * Math.PI;
-		double turn_speed = rotateFunc(angle);
-		if ((angle - getAngle()) % 1 > .25 && (angle - getAngle()) % 1 < .75)
+	public void relativeDrive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
+
+		move = translation.add(perpendicular.scale(rotation));
+		double angle = Math.atan2(move.getY(), move.getX());
+		double current = pivot.getPosition();
+
+		angle /= (2.0 * Math.PI);
+
+		angle -= current;
+
+		pivot.set(current + angle);
+
+		double speed = move.magnitude();
+
+		if (angle % 1 > .25 && angle % 1 < .75)
 			speed = -speed;
+
 		normalizer.add(drive, speed);
-		pivot.set(turn_speed);
 	}
 
-	private double rotateFunc(double angle) {
-		angle -= getAngle();
-		angle = angle % 1d;
-		if (angle < .25)
-			return angle * 4;
-		if (angle > .75)
-			return (angle - 1) * 4;
-		return (angle - .5) * 4;
+	public void setRelative(double encoderCPR) {
+
+		pivot.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		pivot.configEncoderCodesPerRev((int) encoderCPR);
 	}
 
 	public void center() {
-		encoder.reset();
+		pivot.setPosition(0);
 	}
 
 	public double getAngle() {
-		return ((double) encoder.get()) / encoderCPR;
+		return (pivot.getPosition() / encoderCPR);
 	}
 
 	public double getEncoderPosition() {
@@ -167,13 +170,13 @@ public class SwerveWheel {
 	}
 
 	public void tankDrive(double rightInput, double leftInput, double encoderPosition) {
-		
+
 		pivot.set(encoderPosition);
 
-		if(tankId.equals("right")){
+		if (tankId.equals("right")) {
 			drive.set(rightInput);
 		}
-		if(tankId.equals("left")){
+		if (tankId.equals("left")) {
 			drive.set(leftInput);
 		}
 
@@ -182,7 +185,7 @@ public class SwerveWheel {
 	// returns true if wheel fails to respond
 	public boolean isBroken() {
 		double currentReference = pivot.getPosition();
-		double testSet = currentReference + (range / 4.0) - 10.0 ;
+		double testSet = currentReference + (range / 4.0) - 10.0;
 
 		// Since the position can go outside of range this check is not needed
 

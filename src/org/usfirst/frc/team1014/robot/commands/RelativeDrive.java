@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class RelativeDrive extends Command {
 
 	public void initialize() {
-
+		DriveTrain.getInstance().setRelative();
 	}
 
 	protected void execute() {

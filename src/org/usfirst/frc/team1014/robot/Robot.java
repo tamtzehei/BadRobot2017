@@ -31,9 +31,9 @@ public class Robot extends IterativeRobot {
 	AutoGroup autoGroup;
 	TestGroup testGroup;
 
-	SendableChooser driveChooser;
+	SendableChooser driveChooser, autoChooser;
 	SmartDashboard smartDashboard;
-	UsbCamera camera;
+	//UsbCamera camera;
 
 	public static OI oi;
 
@@ -54,8 +54,11 @@ public class Robot extends IterativeRobot {
 		driveChooser.addObject("Tank Drive", new TankDrive());
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		
-		camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(640, 480);
+		autoChooser = new SendableChooser();
+		
+		
+		//camera = CameraServer.getInstance().startAutomaticCapture();
+		//camera.setResolution(640, 480);
 		
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);

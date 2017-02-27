@@ -11,7 +11,7 @@ public class Shooter extends Subsystem {
 	public static Shooter shooter;
 	public static CANTalon shoot, rotater;
 
-	public Shooter getInstance() {
+	public static Shooter getInstance() {
 		if (shooter == null)
 			shooter = new Shooter();
 		return shooter;
