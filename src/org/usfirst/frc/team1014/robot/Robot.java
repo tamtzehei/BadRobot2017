@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
 
-		driveChooser = new SendableChooser();
+		/*driveChooser = new SendableChooser();
 		driveChooser.addDefault("Swerve Drive", new TeleDrive());
 		driveChooser.addObject("Relative Swerve", new RelativeDrive());
 		driveChooser.addObject("Tank Drive", new TankDrive());
@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot {
 		
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
-		}
+		}*/
 	}
 
 	/*
@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		stateChangeInit();
-		teleopGroup.addParallel((Command) driveChooser.getSelected());
+		//teleopGroup.addParallel((Command) driveChooser.getSelected());
 		Scheduler.getInstance().add(teleopGroup);
 	}
 
