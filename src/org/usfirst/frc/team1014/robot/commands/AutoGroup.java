@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoGroup extends CommandGroup {
 	
 	public AutoGroup() {
+		
 	}
 
 }

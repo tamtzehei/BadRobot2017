@@ -14,43 +14,51 @@ public class TeleDrive extends Command {
 	private static boolean Xbutton, Abutton;
 
 	protected void initialize() {
-		/*isSwerve = true;
+
+		isSwerve = true;
 		isAbsolute = true;
 		Xbutton = false;
-		Abutton = false;*/
+		Abutton = false;
+
 	}
 
 	public void execute() {
 		double rotation = OI.xboxController0.getRawAxis(4);
 		if (Math.abs(rotation) < .15)
 			rotation = 0;
-		DriveTrain.getInstance().drive(rotation,
-				new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
-		/*
-		 * 
-		 * if (OI.xboxController0.getRawButton(3)) { Xbutton = true; } else
-		 * if(!OI.xboxController0.getRawButton(3) && Xbutton){ Xbutton = false;
-		 * isSwerve = !isSwerve; if (isSwerve == false) badEncoderPosition =
-		 * DriveTrain.getInstance().getAngleOfBrokenWheel(); }
-		 * 
-		 * if (OI.xboxController0.getRawButton(1)) { Abutton = true; } else
-		 * if(!OI.xboxController0.getRawButton(1) && Abutton){ Abutton = false;
-		 * isAbsolute = !isAbsolute; if (isAbsolute == false)
-		 * DriveTrain.getInstance().setRelative(); }
-		 * 
-		 * if (isSwerve && isAbsolute) {
-		 * 
-		 * }
-		 * 
-		 * if (isSwerve && !isAbsolute) {
-		 * DriveTrain.getInstance().relativeDrive(rotation, new
-		 * Vector2d(OI.xboxController0.getRawAxis(0),
-		 * -OI.xboxController0.getRawAxis(1))); }
-		 * 
-		 * if (!isSwerve) {
-		 * DriveTrain.getInstance().tankDrive(-OI.xboxController0.getRawAxis(5),
-		 * -OI.xboxController0.getRawAxis(1), badEncoderPosition); }
-		 */
+
+		if (OI.xboxController0.getRawButton(3)) {
+			Xbutton = true;
+		} else if (!OI.xboxController0.getRawButton(3) && Xbutton) {
+			Xbutton = false;
+			isSwerve = !isSwerve;
+			if (isSwerve == false)
+				badEncoderPosition = DriveTrain.getInstance().getAngleOfBrokenWheel();
+		}
+
+		if (OI.xboxController0.getRawButton(1)) {
+			Abutton = true;
+		} else if (!OI.xboxController0.getRawButton(1) && Abutton) {
+			Abutton = false;
+			isAbsolute = !isAbsolute;
+			if (isAbsolute == false)
+				DriveTrain.getInstance().setRelative();
+		}
+
+		if (isSwerve && isAbsolute) {
+			DriveTrain.getInstance().drive(rotation,
+					new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
+		}
+
+		if (isSwerve && !isAbsolute) {
+			DriveTrain.getInstance().relativeDrive(rotation,
+					new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
+		}
+
+		if (!isSwerve) {
+			DriveTrain.getInstance().tankDrive(-OI.xboxController0.getRawAxis(5), -OI.xboxController0.getRawAxis(1),
+					badEncoderPosition);
+		}
 
 	}
 

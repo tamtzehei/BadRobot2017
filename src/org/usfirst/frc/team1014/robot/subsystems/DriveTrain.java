@@ -58,6 +58,10 @@ public class DriveTrain extends Subsystem {
 	public void zeroYaw() {
 		navx.zeroYaw();
 	}
+	
+	public double getYaw(){
+		return navx.getYaw();
+	}
 
 	public void drive(final double rotation, Vector2d translation) {
 

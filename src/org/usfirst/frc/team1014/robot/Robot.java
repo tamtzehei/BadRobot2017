@@ -7,11 +7,18 @@ import org.usfirst.frc.team1014.robot.commands.TankDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
+import org.usfirst.frc.team1014.robot.commands.auto.AutoDelay;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossRight;
+import org.usfirst.frc.team1014.robot.commands.auto.GearCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.GearLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.GearRight;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -48,21 +55,32 @@ public class Robot extends IterativeRobot {
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
 
-		/*driveChooser = new SendableChooser();
+		driveChooser = new SendableChooser();
 		driveChooser.addDefault("Swerve Drive", new TeleDrive());
 		driveChooser.addObject("Relative Swerve", new RelativeDrive());
 		driveChooser.addObject("Tank Drive", new TankDrive());
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		
 		autoChooser = new SendableChooser();
+		autoChooser.addDefault("CrossLeft", new CrossLeft());
+		autoChooser.addObject("CrossRight", new CrossRight());
+		autoChooser.addObject("CrossCenter", new CrossCenter());
+		autoChooser.addObject("GearLeft", new GearLeft());
+		autoChooser.addObject("GearRight", new GearRight());
+		autoChooser.addObject("GearCenter", new GearCenter());
+		autoChooser.addObject("ShootLeft", new ShootLeft());
+		autoChooser.addObject("ShootRight", new ShootRight());
+		autoChooser.addObject("ShootCenter", new ShootCenter());
+		smartDashboard.putData("Auto Chooser", autoChooser);
 		
+		smartDashboard.putNumber("Delay", 0);
 		
 		//camera = CameraServer.getInstance().startAutomaticCapture();
 		//camera.setResolution(640, 480);
 		
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
-		}*/
+		}
 	}
 
 	/*
@@ -76,13 +94,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		stateChangeInit();
-		//teleopGroup.addParallel((Command) driveChooser.getSelected());
+		teleopGroup.addParallel((Command) driveChooser.getSelected());
 		Scheduler.getInstance().add(teleopGroup);
 	}
 
 	@Override
 	public void autonomousInit() {
 		stateChangeInit();
+		autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
+		autoGroup.addSequential((Command)autoChooser.getSelected());
 		Scheduler.getInstance().add(autoGroup);
 	}
 
