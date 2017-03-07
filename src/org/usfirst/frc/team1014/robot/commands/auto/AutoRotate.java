@@ -5,21 +5,26 @@ import org.usfirst.frc.team1014.robot.util.Vector2d;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AutoRotate extends Command{
+public class AutoRotate extends Command {
 
 	double angle, diff;
-	
-	public AutoRotate(double angle){
+
+	public AutoRotate(double angle) {
 		this.angle = angle;
 	}
-	
-	protected void execute(){
-		DriveTrain.getInstance().drive(Math.abs(angle) / angle, new Vector2d(0,0));
+
+	protected void execute() {
+		DriveTrain.getInstance().drive(Math.abs(angle) / angle, new Vector2d(0, 0));
 		diff = DriveTrain.getInstance().getYaw() - angle;
 	}
+
+	protected void end() {
+		DriveTrain.getInstance().drive(0, new Vector2d(0, 0));
+	}
+
 	@Override
 	protected boolean isFinished() {
-		if(diff < 5.0)
+		if (diff < 5.0)
 			return true;
 		return false;
 	}

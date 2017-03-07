@@ -10,5 +10,4 @@ public class CrossLeft extends CommandGroup{
 		this.addSequential(new AutoDrive(1, new Vector2d(-1, 1)));
 		this.addSequential(new AutoDrive(3, new Vector2d(0, 1)));
 	}
-
 }

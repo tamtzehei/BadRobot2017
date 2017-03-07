@@ -13,23 +13,29 @@ public class AutoDrive extends Command {
 
 	/**
 	 * 
-	 * @param time - time in seconds the robot should drive
-	 * @param translation - vector robot should move in
+	 * @param time
+	 *            - time in seconds the robot should drive
+	 * @param translation
+	 *            - vector robot should move in
 	 */
 	public AutoDrive(double time, Vector2d translation) {
 		this.time = time * 1000000;
-		this.translation = translation;
+		this.translation = new Vector2d(translation.getX(), -translation.getY());
 		startTime = Utility.getFPGATime();
 	}
 
 	protected void execute() {
-		DriveTrain.getInstance().drive(0, new Vector2d(0,1));
-		passedTime = startTime - Utility.getFPGATime();
+		DriveTrain.getInstance().drive(0, translation);
+		passedTime = Utility.getFPGATime() - startTime;
 	}
-	
+
+	protected void end() {
+		DriveTrain.getInstance().drive(0, new Vector2d(0, 0));
+	}
+
 	@Override
 	protected boolean isFinished() {
-		if(passedTime > time)
+		if (passedTime > time)
 			return true;
 		return false;
 	}

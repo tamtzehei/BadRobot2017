@@ -181,23 +181,4 @@ public class SwerveWheel {
 		}
 
 	}
-
-	// returns true if wheel fails to respond
-	public boolean isBroken() {
-		double currentReference = pivot.getPosition();
-		double testSet = currentReference + (range / 4.0) - 10.0;
-
-		pivot.set(testSet);
-		if (Math.abs(pivot.getPosition() - testSet) < 20)
-			return true;
-
-		testSet = currentReference - (range / 4.0) + 10.0;
-	
-		pivot.set(testSet);
-		if (Math.abs(pivot.getPosition() - testSet) < 20)
-			return true;
-
-		return false;
-
-	}
 }

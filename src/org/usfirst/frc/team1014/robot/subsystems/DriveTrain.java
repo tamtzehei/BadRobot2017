@@ -36,13 +36,13 @@ public class DriveTrain extends Subsystem {
 			{
 				// Relative Encoder values are not correct
 				add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
-						RobotMap.PIVOT_MOTOR_A, 346, 888, 13, ENCODER_CPR)); // A
+						RobotMap.PIVOT_MOTOR_A, 764, 888, 13, ENCODER_CPR)); // A
 				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B,
-						RobotMap.PIVOT_MOTOR_B, 364, 867, 13, ENCODER_CPR)); // B
+						RobotMap.PIVOT_MOTOR_B, 797, 867, 13, ENCODER_CPR)); // B
 				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C,
-						RobotMap.PIVOT_MOTOR_C, 177, 882, 13, ENCODER_CPR)); // C
+						RobotMap.PIVOT_MOTOR_C, 526, 882, 13, ENCODER_CPR)); // C
 				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D,
-						RobotMap.PIVOT_MOTOR_D, 731, 888, 13, ENCODER_CPR)); // D
+						RobotMap.PIVOT_MOTOR_D, 291, 888, 13, ENCODER_CPR)); // D
 			}
 		};
 
@@ -98,17 +98,6 @@ public class DriveTrain extends Subsystem {
 	public void tankDrive(double rightStick, double leftStick, double encoderPosition) {
 
 		swerveWheels.forEach((w) -> w.tankDrive(rightStick, leftStick, encoderPosition));
-
-	}
-
-	public double getAngleOfBrokenWheel() {
-
-		for (SwerveWheel w : swerveWheels) {
-			if (w.isBroken())
-				return w.getEncoderPosition();
-		}
-
-		return 0;
 
 	}
 

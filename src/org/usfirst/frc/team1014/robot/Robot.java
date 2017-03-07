@@ -8,6 +8,7 @@ import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
 import org.usfirst.frc.team1014.robot.commands.auto.AutoDelay;
+import org.usfirst.frc.team1014.robot.commands.auto.AutoDrive;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossRight;
@@ -18,6 +19,7 @@ import org.usfirst.frc.team1014.robot.commands.auto.ShootCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+import org.usfirst.frc.team1014.robot.util.Vector2d;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -54,12 +56,12 @@ public class Robot extends IterativeRobot {
 		teleopGroup = new TeleopGroup();
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
-
+		smartDashboard = new SmartDashboard();
+		
 		driveChooser = new SendableChooser();
 		driveChooser.addDefault("Swerve Drive", new TeleDrive());
 		driveChooser.addObject("Relative Swerve", new RelativeDrive());
 		driveChooser.addObject("Tank Drive", new TankDrive());
-		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("CrossLeft", new CrossLeft());
@@ -71,10 +73,11 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("ShootLeft", new ShootLeft());
 		autoChooser.addObject("ShootRight", new ShootRight());
 		autoChooser.addObject("ShootCenter", new ShootCenter());
-		smartDashboard.putData("Auto Chooser", autoChooser);
 		
 		smartDashboard.putNumber("Delay", 0);
-		
+		smartDashboard.putData("Drive Mode Chooser", driveChooser);
+		smartDashboard.putData("Auto Chooser", autoChooser);
+
 		//camera = CameraServer.getInstance().startAutomaticCapture();
 		//camera.setResolution(640, 480);
 		
@@ -103,6 +106,7 @@ public class Robot extends IterativeRobot {
 		stateChangeInit();
 		autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
 		autoGroup.addSequential((Command)autoChooser.getSelected());
+		
 		Scheduler.getInstance().add(autoGroup);
 	}
 

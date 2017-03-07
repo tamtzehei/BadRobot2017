@@ -14,6 +14,7 @@ public class AutoDelay extends Command{
 	
 	protected void execute(){
 		passedTime = Utility.getFPGATime() - startTime;
+		System.out.println(passedTime);
 	}
 	
 	@Override

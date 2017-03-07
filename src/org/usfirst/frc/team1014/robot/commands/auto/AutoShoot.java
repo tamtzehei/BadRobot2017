@@ -22,6 +22,11 @@ public class AutoShoot extends Command {
 		Shooter.getInstance().rotateFeeder(1);
 		passedTime = Utility.getFPGATime() - startTime;
 	}
+	
+	protected void end(){
+		Shooter.getInstance().shoot(0);
+		Shooter.getInstance().rotateFeeder(0);
+	}
 
 	@Override
 	protected boolean isFinished() {
