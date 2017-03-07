@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1014.robot.commands.auto;
 
 import org.usfirst.frc.team1014.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team1014.robot.util.Vector2d;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
 import edu.wpi.first.wpilibj.command.Command;
 

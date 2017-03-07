@@ -9,3 +9,4 @@ public class AutoGroup extends CommandGroup {
 	}
 
 }
+

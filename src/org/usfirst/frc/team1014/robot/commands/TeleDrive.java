@@ -2,7 +2,7 @@ package org.usfirst.frc.team1014.robot.commands;
 
 import org.usfirst.frc.team1014.robot.OI;
 import org.usfirst.frc.team1014.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team1014.robot.util.Vector2d;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -32,8 +32,6 @@ public class TeleDrive extends Command {
 		} else if (!OI.xboxController0.getRawButton(3) && Xbutton) {
 			Xbutton = false;
 			isSwerve = !isSwerve;
-			if (isSwerve == false)
-				badEncoderPosition = DriveTrain.getInstance().getAngleOfBrokenWheel();
 		}
 
 		if (OI.xboxController0.getRawButton(1)) {

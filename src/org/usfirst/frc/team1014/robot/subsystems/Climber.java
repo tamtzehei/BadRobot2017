@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Climber extends Subsystem {
 
 	private Climber() {
-		
 	}
 
 	@Override
