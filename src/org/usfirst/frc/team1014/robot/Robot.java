@@ -8,7 +8,6 @@ import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
 import org.usfirst.frc.team1014.robot.commands.auto.AutoDelay;
-import org.usfirst.frc.team1014.robot.commands.auto.AutoDrive;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossRight;
@@ -19,7 +18,6 @@ import org.usfirst.frc.team1014.robot.commands.auto.ShootCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
-import org.usfirst.frc.team1014.robot.util.Vector2d;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;

@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team1014.robot.RobotMap;
-import org.usfirst.frc.team1014.robot.util.Vector2d;
 import org.usfirst.frc.team1014.robot.utils.SpeedControllerNormalizer;
 import org.usfirst.frc.team1014.robot.utils.SwerveWheel;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class DriveTrain extends Subsystem {
@@ -46,9 +45,6 @@ public class DriveTrain extends Subsystem {
 			}
 		};
 
-		// Using values from old robot, may not be correct
-		// mxpPort = new SerialPort(57600, SerialPort.Port.kMXP);
-		// imu = new IMU(mxpPort, (byte) 127);
 		navx = new AHRS(SPI.Port.kMXP);
 		navx.zeroYaw();
 
@@ -58,8 +54,8 @@ public class DriveTrain extends Subsystem {
 	public void zeroYaw() {
 		navx.zeroYaw();
 	}
-	
-	public double getYaw(){
+
+	public double getYaw() {
 		return navx.getYaw();
 	}
 
@@ -90,13 +86,12 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void setRelative() {
-		for(SwerveWheel w : swerveWheels){
+		for (SwerveWheel w : swerveWheels) {
 			w.setRelative(ENCODER_CPR);
 		}
 	}
 
 	public void tankDrive(double rightStick, double leftStick, double encoderPosition) {
-
 		swerveWheels.forEach((w) -> w.tankDrive(rightStick, leftStick, encoderPosition));
 
 	}
