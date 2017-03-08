@@ -6,6 +6,7 @@ public class TeleopGroup extends CommandGroup {
 	
 	public TeleopGroup() {
 		this.addParallel(new UseShooter());
+		this.addParallel(new UseClimber());
 	}
 
 }

@@ -20,6 +20,6 @@ public class RobotMap {
 	public static final int PIVOT_MOTOR_D = 12;
 	public static final int SHOOTER_MOTOR = 31;
 	public static final int ROTATER_MOTOR = 33;
-	//public static final int CLIMBER_MOTOR = ;
+	public static final int CLIMBER_MOTOR = 00;  // Placeholder value, get real value from robot
 }
 

@@ -9,6 +9,10 @@ public class AutoRotate extends Command {
 
 	double angle, diff;
 
+	/**
+	 * 
+	 * @param angle angle from -180 to 180 
+	 */
 	public AutoRotate(double angle) {
 		this.angle = angle;
 	}
