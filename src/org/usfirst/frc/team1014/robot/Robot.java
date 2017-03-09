@@ -7,7 +7,7 @@ import org.usfirst.frc.team1014.robot.commands.TankDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
-import org.usfirst.frc.team1014.robot.commands.auto.AutoDelay;
+import org.usfirst.frc.team1014.robot.commands.auto.AutoDrive;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.CrossRight;
@@ -18,7 +18,10 @@ import org.usfirst.frc.team1014.robot.commands.auto.ShootCenter;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootLeft;
 import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -40,7 +43,7 @@ public class Robot extends IterativeRobot {
 
 	SendableChooser driveChooser, autoChooser;
 	SmartDashboard smartDashboard;
-	//UsbCamera camera;
+	UsbCamera camera;
 
 	public static OI oi;
 
@@ -76,8 +79,8 @@ public class Robot extends IterativeRobot {
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		smartDashboard.putData("Auto Chooser", autoChooser);
 
-		//camera = CameraServer.getInstance().startAutomaticCapture();
-		//camera.setResolution(640, 480);
+		camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(640, 480);
 		
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
@@ -102,9 +105,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		stateChangeInit();
-		autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
-		autoGroup.addSequential((Command)autoChooser.getSelected());
+		//autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
+		//autoGroup.addSequential((Command) autoChooser.getSelected());
 		
+		autoGroup.addSequential(new AutoDrive(.5, new Vector2d(0,1)));
+		autoGroup.addSequential(new AutoDrive(1, new Vector2d(0, -1)));
 		Scheduler.getInstance().add(autoGroup);
 	}
 

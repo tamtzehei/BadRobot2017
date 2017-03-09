@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TeleDrive extends Command {
 
-	private static boolean isSwerve;
+	/*private static boolean isSwerve;
 	private static boolean isAbsolute;
 	private static double badEncoderPosition;
 	private static boolean Xbutton, Abutton;
@@ -20,14 +20,17 @@ public class TeleDrive extends Command {
 		Xbutton = false;
 		Abutton = false;
 
-	}
+	}*/
 
 	public void execute() {
 		double rotation = OI.xboxController0.getRawAxis(4);
 		if (Math.abs(rotation) < .15)
 			rotation = 0;
+		
+		DriveTrain.getInstance().drive(-rotation,
+				new Vector2d(-OI.xboxController0.getRawAxis(0), OI.xboxController0.getRawAxis(1)));
 
-		if (OI.xboxController0.getRawButton(3)) {
+		/*if (OI.xboxController0.getRawButton(3)) {
 			Xbutton = true;
 		} else if (!OI.xboxController0.getRawButton(3) && Xbutton) {
 			Xbutton = false;
@@ -44,8 +47,7 @@ public class TeleDrive extends Command {
 		}
 
 		if (isSwerve && isAbsolute) {
-			DriveTrain.getInstance().drive(rotation,
-					new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
+			
 		}
 
 		if (isSwerve && !isAbsolute) {
@@ -56,7 +58,7 @@ public class TeleDrive extends Command {
 		if (!isSwerve) {
 			DriveTrain.getInstance().tankDrive(-OI.xboxController0.getRawAxis(5), -OI.xboxController0.getRawAxis(1),
 					badEncoderPosition);
-		}
+		}*/
 
 	}
 

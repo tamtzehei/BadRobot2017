@@ -20,8 +20,8 @@ public class DriveTrain extends Subsystem {
 
 	AHRS navx;
 
-	private static final double L = 1; // .69;
-	private static final double W = 1; // .48;
+	private static final double L = .69;
+	private static final double W = .48;
 	private static final double ENCODER_CPR = 414.1666d;
 
 	public static DriveTrain getInstance() {
@@ -35,13 +35,13 @@ public class DriveTrain extends Subsystem {
 			{
 				// Relative Encoder values are not correct
 				add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
-						RobotMap.PIVOT_MOTOR_A, 764, 888, 13, ENCODER_CPR)); // A
+						RobotMap.PIVOT_MOTOR_A, 764, 888, 13, ENCODER_CPR)); 
 				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B,
-						RobotMap.PIVOT_MOTOR_B, 797, 867, 13, ENCODER_CPR)); // B
+						RobotMap.PIVOT_MOTOR_B, 797, 867, 13, ENCODER_CPR));
 				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C,
-						RobotMap.PIVOT_MOTOR_C, 526, 882, 13, ENCODER_CPR)); // C
+						RobotMap.PIVOT_MOTOR_C, 526, 882, 13, ENCODER_CPR)); 
 				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D,
-						RobotMap.PIVOT_MOTOR_D, 291, 888, 13, ENCODER_CPR)); // D
+						RobotMap.PIVOT_MOTOR_D, 291, 888, 13, ENCODER_CPR));
 			}
 		};
 
