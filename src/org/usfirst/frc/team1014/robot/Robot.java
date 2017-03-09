@@ -2,12 +2,31 @@ package org.usfirst.frc.team1014.robot;
 
 import org.usfirst.frc.team1014.robot.commands.AutoGroup;
 import org.usfirst.frc.team1014.robot.commands.CommandBase;
+import org.usfirst.frc.team1014.robot.commands.RelativeDrive;
+import org.usfirst.frc.team1014.robot.commands.TankDrive;
+import org.usfirst.frc.team1014.robot.commands.TeleDrive;
 import org.usfirst.frc.team1014.robot.commands.TeleopGroup;
 import org.usfirst.frc.team1014.robot.commands.TestGroup;
+import org.usfirst.frc.team1014.robot.commands.auto.AutoDrive;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.CrossRight;
+import org.usfirst.frc.team1014.robot.commands.auto.GearCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.GearLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.GearRight;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootCenter;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootLeft;
+import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
+import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,10 +36,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
+
 	TeleopGroup teleopGroup;
 	AutoGroup autoGroup;
 	TestGroup testGroup;
+
+	SendableChooser driveChooser, autoChooser;
+	SmartDashboard smartDashboard;
+	UsbCamera camera;
 
 	public static OI oi;
 
@@ -34,17 +57,40 @@ public class Robot extends IterativeRobot {
 		teleopGroup = new TeleopGroup();
 		autoGroup = new AutoGroup();
 		testGroup = new TestGroup();
+		smartDashboard = new SmartDashboard();
 		
-		if(CommandBase.lights != null)
-		{	
+		driveChooser = new SendableChooser();
+		driveChooser.addDefault("Swerve Drive", new TeleDrive());
+		driveChooser.addObject("Relative Swerve", new RelativeDrive());
+		driveChooser.addObject("Tank Drive", new TankDrive());
+		
+		autoChooser = new SendableChooser();
+		autoChooser.addDefault("CrossLeft", new CrossLeft());
+		autoChooser.addObject("CrossRight", new CrossRight());
+		autoChooser.addObject("CrossCenter", new CrossCenter());
+		autoChooser.addObject("GearLeft", new GearLeft());
+		autoChooser.addObject("GearRight", new GearRight());
+		autoChooser.addObject("GearCenter", new GearCenter());
+		autoChooser.addObject("ShootLeft", new ShootLeft());
+		autoChooser.addObject("ShootRight", new ShootRight());
+		autoChooser.addObject("ShootCenter", new ShootCenter());
+		
+		smartDashboard.putNumber("Delay", 0);
+		smartDashboard.putData("Drive Mode Chooser", driveChooser);
+		smartDashboard.putData("Auto Chooser", autoChooser);
+
+		camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(640, 480);
+		
+		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
 		}
 	}
-	
+
 	/*
 	 * An Init function is called whenever the robot changes state.
 	 */
-	
+
 	private void stateChangeInit() {
 		Scheduler.getInstance().removeAll();
 	}
@@ -52,12 +98,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		stateChangeInit();
+		teleopGroup.addParallel((Command) driveChooser.getSelected());
 		Scheduler.getInstance().add(teleopGroup);
 	}
 
 	@Override
 	public void autonomousInit() {
 		stateChangeInit();
+		//autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
+		//autoGroup.addSequential((Command) autoChooser.getSelected());
+		
+		autoGroup.addSequential(new AutoDrive(.5, new Vector2d(0,1)));
+		autoGroup.addSequential(new AutoDrive(1, new Vector2d(0, -1)));
 		Scheduler.getInstance().add(autoGroup);
 	}
 
@@ -71,17 +123,12 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		stateChangeInit();
 	}
-	
+
 	/*
 	 * Periodic commands are called every 20m by the system. If it does not
-	 * return within 20ms it will wait until the last one returned. 
+	 * return within 20ms it will wait until the last one returned.
 	 */
 
-	/**
-	 * A method that is called by each of the periodic functions on the
-	 * robot. This is our implementation and is to prevent reused code
-	 * in the systems periodic methods.
-	 */
 	private void periodic() {
 		Scheduler.getInstance().run();
 	}
@@ -89,6 +136,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
+		//climbTalon.set(oi.xboxController0.getTriggerAxis(Hand.kLeft) - oi.xboxController0.getTriggerAxis(Hand.kRight));
 	}
 
 	@Override

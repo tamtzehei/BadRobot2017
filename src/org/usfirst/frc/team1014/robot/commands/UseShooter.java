@@ -10,7 +10,7 @@ public class UseShooter extends Command {
 	Shooter shooter;
 
 	protected void initialize() {
-		shooter = new Shooter();
+		shooter = Shooter.getInstance();
 	}
 
 	protected void execute() {

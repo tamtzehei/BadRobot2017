@@ -4,6 +4,8 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
+import edu.wpi.first.wpilibj.Encoder;
+
 public class SwerveWheel {
 
 	private Vector2d perpendicular;
@@ -14,25 +16,22 @@ public class SwerveWheel {
 	private double range;
 	Vector2d move;
 	double finalPosition;
-	String moduleID;
-	TankPosition tankPosition;
+	Encoder encoder;
+	private double encoderCPR;
+	String id, tankId;
 
-	public enum TankPosition {
-		LEFT, RIGHT;
-	}
+	public SwerveWheel(String id, String tankId, Vector2d location, int driveMotorPin, int pivotMotorPin, double offset,
+			double encoderMax, double encoderMin, double encoderCPR) {
 
-
-	public SwerveWheel(String moduleID, TankPosition tankPosition, Vector2d location, int driveMotorPin, int pivotMotorPin, double offset,
-			double encoderMax, double encoderMin) {
-
-		this.moduleID = moduleID;
+		this.id = id;
+		this.tankId = tankId;
+		this.encoderCPR = encoderCPR;
 		this.offset = offset;
 		this.encoderMax = encoderMax;
 		this.encoderMin = encoderMin;
 		range = encoderMax - encoderMin;
-		this.tankPosition = tankPosition;
 
-		perpendicular = location.perpendicularCW().rotateDegrees(90);
+		perpendicular = location.perpendicularCW();
 		perpendicular = perpendicular.normalize();
 
 		drive = new CANTalon(driveMotorPin);
@@ -42,6 +41,7 @@ public class SwerveWheel {
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
 		pivot.setPID(32, 0, 0);
 		pivot.enableControl();
+
 	}
 
 	public void drive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
@@ -49,13 +49,12 @@ public class SwerveWheel {
 		double speed = 0.0;
 		double negativeIfInverted = 1.0;
 
-
 		Vector2d move = translation.add(perpendicular.scale(rotation));
 
 		double currentPosition = pivot.getPosition();
 		double rawCurrent = pivot.getAnalogInRaw();
 
-		System.out.println(moduleID + ": " + rawCurrent);
+		System.out.println(id + ": " + rawCurrent);
 
 		double currentRadians = (Math.PI * 2.0 * (rawCurrent - offset)) / range;
 
@@ -86,9 +85,8 @@ public class SwerveWheel {
 		normalizer.add(drive, speed);
 	}
 
-
 	/**
-	 *
+	 * 
 	 * @param move
 	 *            - vector robot should move
 	 * @return - the final encoder value between the max and min
@@ -109,7 +107,7 @@ public class SwerveWheel {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param rawFinal
 	 *            - the final encoder value between the max and min
 	 * @param currentPosition
@@ -129,11 +127,54 @@ public class SwerveWheel {
 		return finalPosition;
 	}
 
+	public void relativeDrive(Vector2d translation, double rotation, SpeedControllerNormalizer normalizer) {
+
+		move = translation.add(perpendicular.scale(rotation));
+		double angle = Math.atan2(move.getY(), move.getX());
+		double current = pivot.getPosition();
+
+		angle /= (2.0 * Math.PI);
+
+		angle -= current;
+
+		pivot.set(current + angle);
+
+		double speed = move.magnitude();
+
+		if (angle % 1 > .25 && angle % 1 < .75)
+			speed = -speed;
+
+		normalizer.add(drive, speed);
+	}
+
+	public void setRelative(double encoderCPR) {
+
+		pivot.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		pivot.configEncoderCodesPerRev((int) encoderCPR);
+	}
+
+	public void center() {
+		pivot.setPosition(0);
+	}
+
+	public double getAngle() {
+		return (pivot.getPosition() / encoderCPR);
+	}
+
+	public double getEncoderPosition() {
+		return pivot.getPosition();
+	}
+
 	public void tankDrive(double rightInput, double leftInput, double encoderPosition) {
+
 		pivot.set(encoderPosition);
 
-		double driveSpeed = tankPosition == TankPosition.LEFT ? leftInput : rightInput;
-		drive.set(driveSpeed);
+		if (tankId.equals("right")) {
+			drive.set(rightInput);
+		}
+		if (tankId.equals("left")) {
+			drive.set(leftInput);
+		}
 
 	}
 }

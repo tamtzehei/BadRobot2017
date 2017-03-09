@@ -22,6 +22,7 @@ public class DriveTrain extends Subsystem {
 
 	private static final double L = .69;
 	private static final double W = .48;
+	private static final double ENCODER_CPR = 414.1666d;
 
 	public static DriveTrain getInstance() {
 		if (instance == null)
@@ -33,18 +34,16 @@ public class DriveTrain extends Subsystem {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
 				// Relative Encoder values are not correct
-				add(new SwerveWheel("A", SwerveWheel.TankPosition.LEFT,new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A, RobotMap.PIVOT_MOTOR_A,
-						789, 888, 13)); // A
-				add(new SwerveWheel("B", SwerveWheel.TankPosition.RIGHT, new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B, RobotMap.PIVOT_MOTOR_B,
-						99, 867, 13)); // B
-				add(new SwerveWheel("C", SwerveWheel.TankPosition.RIGHT, new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C, RobotMap.PIVOT_MOTOR_C,
-						118, 882, 13)); // C
-				add(new SwerveWheel("D", SwerveWheel.TankPosition.LEFT, new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D, RobotMap.PIVOT_MOTOR_D,
-						701, 888, 13)); // D
+				add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
+						RobotMap.PIVOT_MOTOR_A, 764, 888, 13, ENCODER_CPR)); 
+				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B,
+						RobotMap.PIVOT_MOTOR_B, 797, 867, 13, ENCODER_CPR));
+				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C,
+						RobotMap.PIVOT_MOTOR_C, 526, 882, 13, ENCODER_CPR)); 
+				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D,
+						RobotMap.PIVOT_MOTOR_D, 291, 888, 13, ENCODER_CPR));
 			}
 		};
-		
-		
 
 		navx = new AHRS(SPI.Port.kMXP);
 		navx.zeroYaw();
@@ -54,7 +53,10 @@ public class DriveTrain extends Subsystem {
 
 	public void zeroYaw() {
 		navx.zeroYaw();
+	}
 
+	public double getYaw() {
+		return navx.getYaw();
 	}
 
 	public void drive(final double rotation, Vector2d translation) {
@@ -65,6 +67,28 @@ public class DriveTrain extends Subsystem {
 
 		normalizer.run();
 		normalizer.clear();
+	}
+
+	public void relativeDrive(final double rotation, Vector2d translation) {
+		if (translation.magnitude() < .15)
+			translation = new Vector2d(0, 0);
+
+		double robotAngle = Math.toRadians(navx.getYaw());
+
+		final Vector2d move = new Vector2d(
+				translation.getX() * Math.cos(robotAngle) - translation.getY() * Math.sin(robotAngle),
+				translation.getY() * Math.cos(robotAngle) + translation.getX() * Math.sin(robotAngle));
+
+		swerveWheels.forEach((w) -> w.relativeDrive(move, rotation, normalizer));
+
+		normalizer.run();
+		normalizer.clear();
+	}
+
+	public void setRelative() {
+		for (SwerveWheel w : swerveWheels) {
+			w.setRelative(ENCODER_CPR);
+		}
 	}
 
 	public void tankDrive(double rightStick, double leftStick, double encoderPosition) {
@@ -79,4 +103,3 @@ public class DriveTrain extends Subsystem {
 	}
 
 }
-
