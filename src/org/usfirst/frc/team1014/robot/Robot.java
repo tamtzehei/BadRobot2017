@@ -82,7 +82,7 @@ public class Robot extends IterativeRobot {
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		smartDashboard.putData("Auto Chooser", autoChooser);
 		
-		climber = new CANTalon(30);
+		//climber = new CANTalon(30);
 
 		//camera = CameraServer.getInstance().startAutomaticCapture();
 		//camera.setResolution(640, 480);
@@ -139,7 +139,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
-		climber.set(oi.xboxController1.getTriggerAxis(Hand.kLeft) - oi.xboxController1.getTriggerAxis(Hand.kRight));
+		//climber.set(oi.xboxController1.getTriggerAxis(Hand.kLeft) - oi.xboxController1.getTriggerAxis(Hand.kRight));
+		//This climber works but a new climber has been made that uses buttons that needs to be tested
 	}
 
 	@Override
