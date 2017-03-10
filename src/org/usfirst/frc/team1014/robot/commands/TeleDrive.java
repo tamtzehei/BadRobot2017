@@ -48,31 +48,11 @@ public class TeleDrive extends Command {
 		/*angle = OI.xboxController0.getPOV();
 		
 		if (OI.xboxController0.getPOV() != -1) {
-			angle = 360 - angle;
+			if(angle > 180)
+				angle = 360 - angle;
 			rotate = new AutoRotate(angle);
 			rotate.start();
 		}*/
-		/*
-		 * 
-		 * if (OI.xboxController0.getRawButton(1)) { Abutton = true; } else if
-		 * (!OI.xboxController0.getRawButton(1) && Abutton) { Abutton = false;
-		 * isAbsolute = !isAbsolute; if (isAbsolute == false)
-		 * DriveTrain.getInstance().setRelative(); }
-		 * 
-		 * if (isSwerve && isAbsolute) {
-		 * 
-		 * }
-		 * 
-		 * if (isSwerve && !isAbsolute) {
-		 * DriveTrain.getInstance().relativeDrive(rotation, new
-		 * Vector2d(OI.xboxController0.getRawAxis(0),
-		 * -OI.xboxController0.getRawAxis(1))); }
-		 * 
-		 * if (!isSwerve) {
-		 * DriveTrain.getInstance().tankDrive(-OI.xboxController0.getRawAxis(5),
-		 * -OI.xboxController0.getRawAxis(1), badEncoderPosition); }
-		 */
-
 	}
 
 	@Override

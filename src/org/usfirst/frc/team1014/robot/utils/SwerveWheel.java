@@ -96,6 +96,10 @@ public class SwerveWheel {
 		}else
 			System.out.print(id + ": " + pivot.getAnalogInRaw() + "  ");
 	}
+	
+	public double getCurrent(){
+		return drive.getOutputCurrent();
+	}
 
 	/**
 	 * 
