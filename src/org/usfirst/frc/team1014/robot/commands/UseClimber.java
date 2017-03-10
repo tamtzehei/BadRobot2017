@@ -27,6 +27,8 @@ public class UseClimber extends Command {
 		if (isClimbing) {
 			climber.climb(-1);
 		}
+		else
+			climber.climb(0);
 
 		if (OI.xboxController1.getTriggerAxis(Hand.kRight) > .15 || OI.xboxController1.getTriggerAxis(Hand.kLeft) > .15)
 			climber.climb(

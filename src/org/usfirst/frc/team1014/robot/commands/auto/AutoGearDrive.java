@@ -18,7 +18,7 @@ public class AutoGearDrive extends Command {
 	protected void execute() {
 		driveTrain.drive(0, new Vector2d(0, .5));
 		System.out.println(driveTrain.getCurrent());
-		if (driveTrain.getCurrent() > 5)
+		if (driveTrain.getCurrent() > 2)
 			count++;
 		else
 			count = 0;

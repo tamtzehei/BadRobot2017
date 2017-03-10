@@ -82,6 +82,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("ShootCenter", new ShootCenter());
 		
 		smartDashboard.putNumber("Delay", 0);
+		
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		smartDashboard.putData("Auto Chooser", autoChooser);
 		
