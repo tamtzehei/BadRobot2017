@@ -14,10 +14,7 @@ public class UseClimber extends Command {
 	}
 
 	protected void execute() {
-		if (OI.xboxController0.getRawAxis(3) > 0)
-			climber.climb(OI.xboxController0.getRawAxis(3));
-		else if (OI.xboxController0.getRawAxis(2) > 0)
-			climber.climb(-OI.xboxController0.getRawAxis(2));
+		climber.climb(OI.xboxController1.getRawAxis(5));
 	}
 
 	@Override

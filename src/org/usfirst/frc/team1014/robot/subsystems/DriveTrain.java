@@ -34,14 +34,22 @@ public class DriveTrain extends Subsystem {
 		swerveWheels = new ArrayList<SwerveWheel>() {
 			{
 				// Relative Encoder values are not correct
-				add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
-						RobotMap.PIVOT_MOTOR_A, 764, 888, 13, ENCODER_CPR)); 
+				/*add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
+						RobotMap.PIVOT_MOTOR_A, 792, 888, 13, ENCODER_CPR)); 
 				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B,
-						RobotMap.PIVOT_MOTOR_B, 797, 867, 13, ENCODER_CPR));
+						RobotMap.PIVOT_MOTOR_B, 95, 867, 13, ENCODER_CPR));
 				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C,
-						RobotMap.PIVOT_MOTOR_C, 526, 882, 13, ENCODER_CPR)); 
+						RobotMap.PIVOT_MOTOR_C, 458, 882, 13, ENCODER_CPR)); 
 				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D,
-						RobotMap.PIVOT_MOTOR_D, 291, 888, 13, ENCODER_CPR));
+						RobotMap.PIVOT_MOTOR_D, 718, 888, 13, ENCODER_CPR));*/
+				add(new SwerveWheel("A", "left", new Vector2d(L / 2, W / 2), RobotMap.DRIVE_MOTOR_A,
+						RobotMap.PIVOT_MOTOR_A, 375, 853, 15, ENCODER_CPR)); 
+				add(new SwerveWheel("B", "right", new Vector2d(-L / 2, W / 2), RobotMap.DRIVE_MOTOR_B,
+						RobotMap.PIVOT_MOTOR_B, 510, 867, 13, ENCODER_CPR));
+				add(new SwerveWheel("C", "right", new Vector2d(-L / 2, -W / 2), RobotMap.DRIVE_MOTOR_C,
+						RobotMap.PIVOT_MOTOR_C, 27, 882, 13, ENCODER_CPR)); 
+				add(new SwerveWheel("D", "left", new Vector2d(L / 2, -W / 2), RobotMap.DRIVE_MOTOR_D,
+						RobotMap.PIVOT_MOTOR_D, 294, 888, 13, ENCODER_CPR));
 			}
 		};
 
@@ -57,6 +65,10 @@ public class DriveTrain extends Subsystem {
 
 	public double getYaw() {
 		return navx.getYaw();
+	}
+	
+	public void test(){
+		swerveWheels.forEach((w) -> w.print());
 	}
 
 	public void drive(final double rotation, Vector2d translation) {
