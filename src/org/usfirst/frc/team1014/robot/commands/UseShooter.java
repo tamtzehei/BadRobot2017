@@ -14,13 +14,15 @@ public class UseShooter extends Command {
 	}
 
 	protected void execute() {
-		if (Math.abs(OI.xboxController1.getRawAxis(5)) > .15) {
+		if (Math.abs(OI.xboxController1.getRawAxis(5)) > .2) {
 			shooter.shoot(-1);
-		}
-		shooter.rotateFeeder(-OI.xboxController1.getRawAxis(1));
-		
-		System.out.println(-OI.xboxController1.getRawAxis(1));
+			shooter.rotateFeeder(-OI.xboxController1.getRawAxis(5));
 
+		} else {
+			shooter.shoot(0);
+			shooter.rotateFeeder(0);
+	
+		}
 	}
 
 	@Override
@@ -30,4 +32,3 @@ public class UseShooter extends Command {
 	}
 
 }
-

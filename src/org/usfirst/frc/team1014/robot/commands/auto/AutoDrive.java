@@ -20,7 +20,7 @@ public class AutoDrive extends Command {
 	 */
 	public AutoDrive(double time, Vector2d translation) {
 		this.time = time * 1000000;
-		this.translation = new Vector2d(translation.getX(), -translation.getY());
+		this.translation = new Vector2d(translation.getX(), translation.getY());
 		startTime = Utility.getFPGATime();
 	}
 

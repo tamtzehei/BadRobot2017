@@ -20,10 +20,11 @@ import org.usfirst.frc.team1014.robot.commands.auto.ShootRight;
 import org.usfirst.frc.team1014.robot.subsystems.LEDLights.LEDState;
 import org.usfirst.frc.team1014.robot.utils.Vector2d;
 
+import com.ctre.CANTalon;
+
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,6 +47,8 @@ public class Robot extends IterativeRobot {
 	UsbCamera camera;
 
 	public static OI oi;
+	
+	CANTalon climber;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -78,9 +81,11 @@ public class Robot extends IterativeRobot {
 		smartDashboard.putNumber("Delay", 0);
 		smartDashboard.putData("Drive Mode Chooser", driveChooser);
 		smartDashboard.putData("Auto Chooser", autoChooser);
+		
+		climber = new CANTalon(30);
 
-		camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(640, 480);
+		//camera = CameraServer.getInstance().startAutomaticCapture();
+		//camera.setResolution(640, 480);
 		
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
@@ -98,7 +103,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		stateChangeInit();
-		teleopGroup.addParallel((Command) driveChooser.getSelected());
+		//teleopGroup.addParallel((Command) driveChooser.getSelected());
 		Scheduler.getInstance().add(teleopGroup);
 	}
 
@@ -107,9 +112,7 @@ public class Robot extends IterativeRobot {
 		stateChangeInit();
 		//autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
 		//autoGroup.addSequential((Command) autoChooser.getSelected());
-		
-		autoGroup.addSequential(new AutoDrive(.5, new Vector2d(0,1)));
-		autoGroup.addSequential(new AutoDrive(1, new Vector2d(0, -1)));
+		autoGroup.addSequential(new AutoDrive(2, new Vector2d(0,1)));
 		Scheduler.getInstance().add(autoGroup);
 	}
 
@@ -136,7 +139,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		periodic();
-		//climbTalon.set(oi.xboxController0.getTriggerAxis(Hand.kLeft) - oi.xboxController0.getTriggerAxis(Hand.kRight));
+		climber.set(oi.xboxController1.getTriggerAxis(Hand.kLeft) - oi.xboxController1.getTriggerAxis(Hand.kRight));
 	}
 
 	@Override
