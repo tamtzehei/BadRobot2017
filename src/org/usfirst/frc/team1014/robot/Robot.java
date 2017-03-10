@@ -25,6 +25,7 @@ import com.ctre.CANTalon;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +46,8 @@ public class Robot extends IterativeRobot {
 	SendableChooser driveChooser, autoChooser;
 	SmartDashboard smartDashboard;
 	UsbCamera camera;
+	
+	PowerAnalyser powerAnalyser;
 
 	public static OI oi;
 	
@@ -90,6 +93,17 @@ public class Robot extends IterativeRobot {
 		if (CommandBase.lights != null) {
 			CommandBase.lights.setLights(LEDState.kDEFAULT);
 		}
+		
+		powerAnalyser = new PowerAnalyser(new PowerDistributionPanel()) {{
+			add("PIVOT-A", 7);
+			add("DRIVE-A", 3);
+			add("PIVOT-B", 4);
+			add("DRIVE-B", 14);
+			add("PIVOT-C", 11);
+			add("DRIVE-C", 15);
+			add("PIVOT-D", 8);
+			add("DRIVE-D", 2);
+		}};
 	}
 
 	/*
@@ -134,6 +148,7 @@ public class Robot extends IterativeRobot {
 
 	private void periodic() {
 		Scheduler.getInstance().run();
+		powerAnalyser.update();
 	}
 
 	@Override
