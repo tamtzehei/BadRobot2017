@@ -18,13 +18,13 @@ public class UseClimber extends Command {
 	}
 
 	protected void execute() {
-		if (OI.xboxController1.getBButton())
-			BButton = true;
+		if (OI.xboxController1.getBButton()){
+			/*BButton = true;
 		if (!OI.xboxController1.getBButton() && BButton) {
 			BButton = false;
 			isClimbing = !isClimbing;
 		}
-		if (isClimbing) {
+		if (isClimbing) {*/
 			climber.climb(-1);
 		}
 		else

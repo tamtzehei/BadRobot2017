@@ -18,13 +18,13 @@ public class UseShooter extends Command {
 	}
 
 	protected void execute() {
-		if(OI.xboxController1.getXButton())
-			XButton = true;
+		if(OI.xboxController1.getXButton()){
+			/*XButton = true;
 		if(!OI.xboxController1.getXButton() && XButton){
 			XButton = false;
 			isShooting = !isShooting;
 		}
-		if(isShooting){
+		if(isShooting){*/
 			shooter.shoot(-1);
 			shooter.rotateFeeder(-1);
 		}
