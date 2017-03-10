@@ -39,7 +39,7 @@ public class SwerveWheel {
 
 		pivot.changeControlMode(TalonControlMode.Position);
 		pivot.setFeedbackDevice(FeedbackDevice.AnalogEncoder);
-		pivot.setPID(16, 0, 0);
+		pivot.setPID(8, 0, 0);
 		pivot.enableControl();
 
 	}
@@ -95,6 +95,10 @@ public class SwerveWheel {
 			System.out.println(id + ": " + pivot.getAnalogInRaw());
 		}else
 			System.out.print(id + ": " + pivot.getAnalogInRaw() + "  ");
+	}
+	
+	public double getCurrent(){
+		return drive.getOutputCurrent();
 	}
 
 	/**
