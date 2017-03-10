@@ -55,12 +55,12 @@ public class SwerveWheel {
 		double rawCurrent = pivot.getAnalogInRaw();
 		
 		
-		/*if(id.equals("D")){
+		if(id.equals("D")){
 			System.out.println(id + ": " + pivot.getAnalogInRaw());
 		}else
 			System.out.print(id + ": " + pivot.getAnalogInRaw() + "  ");
 		
-		if(id.equals("D")){
+		/*if(id.equals("D")){
 			System.out.println(id + ": " + drive.getOutputCurrent());
 		}else
 			System.out.print(id + ": " + drive.getOutputCurrent() + "  ");*/

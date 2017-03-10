@@ -9,24 +9,14 @@ import edu.wpi.first.wpilibj.command.Command;
 public class UseClimber extends Command {
 
 	Climber climber;
-	boolean BButton, isClimbing;
 
 	protected void initialize() {
 		climber = Climber.getInstance();
-		BButton = false;
-		isClimbing = false;
 	}
 
 	protected void execute() {
 		if (OI.xboxController1.getBButton())
-			BButton = true;
-		if (!OI.xboxController1.getBButton() && BButton) {
-			BButton = false;
-			isClimbing = !isClimbing;
-		}
-		if (isClimbing) {
 			climber.climb(-1);
-		}
 		else
 			climber.climb(0);
 

@@ -9,34 +9,24 @@ import edu.wpi.first.wpilibj.command.Command;
 public class UseShooter extends Command {
 
 	Shooter shooter;
-	boolean XButton, isShooting;
 
 	protected void initialize() {
 		shooter = Shooter.getInstance();
-		XButton = false;
-		isShooting = false;
 	}
 
 	protected void execute() {
-		if(OI.xboxController1.getXButton())
-			XButton = true;
-		if(!OI.xboxController1.getXButton() && XButton){
-			XButton = false;
-			isShooting = !isShooting;
-		}
-		if(isShooting){
+		if (OI.xboxController1.getXButton()) {
 			shooter.shoot(-1);
 			shooter.rotateFeeder(-1);
-		}
-		else{
+		} else {
 			shooter.shoot(0);
 			shooter.rotateFeeder(0);
 		}
-		
-		if(Math.abs(OI.xboxController1.getY(Hand.kRight)) > .15) {
+
+		if (Math.abs(OI.xboxController1.getY(Hand.kRight)) > .15) {
 			shooter.shoot(OI.xboxController1.getY(Hand.kRight));
 		}
-		if(Math.abs(OI.xboxController1.getY(Hand.kLeft)) > .15){
+		if (Math.abs(OI.xboxController1.getY(Hand.kLeft)) > .15) {
 			shooter.rotateFeeder(OI.xboxController1.getY(Hand.kLeft));
 		}
 	}
