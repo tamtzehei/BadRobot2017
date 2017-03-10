@@ -21,14 +21,14 @@ public class TeleDrive extends Command {
 	 * }
 	 */
 	private static boolean AButton;
-	
-	protected void initialize(){
+
+	protected void initialize() {
 		AButton = false;
 	}
-	
+
 	double angle;
 	AutoRotate rotate;
-	
+
 	public void execute() {
 		double rotation = OI.xboxController0.getRawAxis(4);
 		if (Math.abs(rotation) < .15)
@@ -36,23 +36,22 @@ public class TeleDrive extends Command {
 
 		DriveTrain.getInstance().drive(rotation,
 				new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
-		
-		if(OI.xboxController0.getAButton()){
+		System.out.println(DriveTrain.getInstance().getCurrent());
+
+		if (OI.xboxController0.getAButton()) {
 			AButton = true;
 		}
-		if(OI.xboxController0.getAButton() && AButton){
+		if (OI.xboxController0.getAButton() && AButton) {
 			DriveTrain.getInstance().zeroYaw();
 			AButton = false;
 		}
 
-		/*angle = OI.xboxController0.getPOV();
-		
-		if (OI.xboxController0.getPOV() != -1) {
-			if(angle > 180)
-				angle = 360 - angle;
-			rotate = new AutoRotate(angle);
-			rotate.start();
-		}*/
+		/*
+		 * angle = OI.xboxController0.getPOV();
+		 * 
+		 * if (OI.xboxController0.getPOV() != -1) { if(angle > 180) angle = 360
+		 * - angle; rotate = new AutoRotate(angle); rotate.start(); }
+		 */
 	}
 
 	@Override

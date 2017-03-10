@@ -26,13 +26,17 @@ public class UseShooter extends Command {
 		}
 		if(isShooting){
 			shooter.shoot(-1);
-			shooter.rotateFeeder(1);
+			shooter.rotateFeeder(-1);
+		}
+		else{
+			shooter.shoot(0);
+			shooter.rotateFeeder(0);
 		}
 		
 		if(Math.abs(OI.xboxController1.getY(Hand.kRight)) > .15) {
-			shooter.shoot(-OI.xboxController1.getY(Hand.kRight));
+			shooter.shoot(OI.xboxController1.getY(Hand.kRight));
 		}
-		if(Math.abs(OI.xboxController1.getY(Hand.kRight)) > .15){
+		if(Math.abs(OI.xboxController1.getY(Hand.kLeft)) > .15){
 			shooter.rotateFeeder(OI.xboxController1.getY(Hand.kLeft));
 		}
 	}
