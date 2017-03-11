@@ -35,7 +35,9 @@ public class TeleDrive extends Command {
 			rotation = 0;
 
 		DriveTrain.getInstance().drive(rotation,
-				new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
+		//		new Vector2d(OI.xboxController0.getRawAxis(0), -OI.xboxController0.getRawAxis(1)));
+		new Vector2d(0,.5));
+		
 		System.out.println(DriveTrain.getInstance().getCurrent());
 
 		if (OI.xboxController0.getAButton()) {

@@ -23,7 +23,6 @@ import org.usfirst.frc.team1014.robot.utils.Vector2d;
 import com.ctre.CANTalon;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -113,7 +112,8 @@ public class Robot extends IterativeRobot {
 		stateChangeInit();
 		//autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
 		//autoGroup.addSequential((Command) autoChooser.getSelected());
-		autoGroup.addSequential(new AutoDrive(2, new Vector2d(0,1)));
+		//autoGroup.addSequential(new AutoDrive(2, new Vector2d(0,1)));
+		autoGroup.addSequential(new AutoDrive(2, new Vector2d(0, 1)));
 		Scheduler.getInstance().add(autoGroup);
 	}
 
