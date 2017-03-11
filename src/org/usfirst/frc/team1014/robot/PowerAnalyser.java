@@ -34,14 +34,21 @@ public class PowerAnalyser {
 
 	public void update() {
 		channels.forEach((k, v) -> SmartDashboard.putDouble(k, pdp.getCurrent(v)));
-		if(!fileWriter.isPresent()) return;
-		Integer[] values = (Integer[]) channels.entrySet().toArray();
+		if (!fileWriter.isPresent())
+			return;
 		List<String> valueStrings = new ArrayList<>();
-		for (Integer v : values)
-			valueStrings.add(v.toString());
+		channels.forEach((k, v) -> valueStrings.add(String.valueOf(pdp.getCurrent(v))));
+		String[] vals = new String[channels.size()];
+		valueStrings.toArray(vals);
 		try {
-			fileWriter.get().write(String.join(", ", (String[]) valueStrings.toArray()));
+			fileWriter.get().write(String.join(", ", vals) + "\n");
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			fileWriter.get().flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -49,9 +56,12 @@ public class PowerAnalyser {
 	public void printFieldHeader() {
 		if (!fileWriter.isPresent())
 			return;
-		String[] headers = (String[]) channels.keySet().toArray();
+		List<String> valueStrings = new ArrayList<>();
+		channels.forEach((k, v) -> valueStrings.add(k));
+		String[] vals = new String[channels.size()];
+		valueStrings.toArray(vals);
 		try {
-			fileWriter.get().write(String.join(", ", headers));
+			fileWriter.get().write(String.join(", ", vals) + "\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

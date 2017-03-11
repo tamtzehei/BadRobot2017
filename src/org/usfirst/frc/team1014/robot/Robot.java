@@ -104,6 +104,8 @@ public class Robot extends IterativeRobot {
 			add("DRIVE-C", 15);
 			add("PIVOT-D", 8);
 			add("DRIVE-D", 2);
+			add("CLIMB", 0);
+			printFieldHeader();
 		}};
 	}
 
