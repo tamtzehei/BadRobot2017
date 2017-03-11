@@ -129,7 +129,7 @@ public class Robot extends IterativeRobot {
 		stateChangeInit();
 		//autoGroup.addSequential(new AutoDelay(smartDashboard.getNumber("Delay", 0)));
 		//autoGroup.addSequential((Command) autoChooser.getSelected());
-		autoGroup.addSequential(new AutoDrive(2.75, new Vector2d(0,1)));
+		autoGroup.addSequential(new AutoDrive(2, new Vector2d(0,1)));
 		Scheduler.getInstance().add(autoGroup);
 	}
 
