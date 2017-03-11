@@ -27,6 +27,9 @@ public class UseClimber extends Command {
 		if (isClimbing) {*/
 			climber.climb(-1);
 		}
+		if(OI.xboxController1.getAButton()){
+			climber.climb(-.5);
+		}
 		else
 			climber.climb(0);
 
